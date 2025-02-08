@@ -20,7 +20,7 @@ class MentionServiceProvider extends PackageServiceProvider
     public function packageBooted()
     {
         FilamentAsset::register([
-            Js::make(id:'tributejs', path: 'https://cdnjs.cloudflare.com/ajax/libs/tributejs/3.3.2/tribute.min.js'),
+            Js::make(id:'tributejs', path: __DIR__.'/../dist/mention.js'),
             Css::make(id:'tributejs', path: 'https://cdnjs.cloudflare.com/ajax/libs/tributejs/3.3.2/tribute.min.css'),
         ], package: 'asmit-mention');
     }
