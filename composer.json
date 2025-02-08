@@ -1,0 +1,28 @@
+{
+    "name": "asmit/mention",
+    "description": "Mention editor",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Asmit\\Mention\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "AsmitNepali",
+            "email": "33512152+AsmitNepali@users.noreply.github.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "filament/support": "^3.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Asmit\\Mention\\MentionServiceProvider"
+            ]
+        }
+    }
+}
