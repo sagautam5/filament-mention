@@ -2,6 +2,9 @@
 
 namespace Asmit\Mention;
 
+use Asmit\Mention\Forms\Components\RichMention;
+use Filament\Forms\Components\Livewire;
+use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Assets\Css;
 use Filament\Support\Assets\Js;
 use Filament\Support\Facades\FilamentAsset;
@@ -20,8 +23,8 @@ class MentionServiceProvider extends PackageServiceProvider
     public function packageBooted()
     {
         FilamentAsset::register([
-            Js::make(id:'tributejs', path: __DIR__.'/../dist/mention.js'),
-            Css::make(id:'tributejs', path: 'https://cdnjs.cloudflare.com/ajax/libs/tributejs/3.3.2/tribute.min.css'),
-        ], package: 'asmit-mention');
+            AlpineComponent::make(id:'tributejs', path: __DIR__.'/../dist/tributejs.js'),
+            Css::make(id:'asmit-mention', path: 'https://cdnjs.cloudflare.com/ajax/libs/tributejs/3.3.2/tribute.min.css'),
+        ], package: 'asmit/mention');
     }
 }
