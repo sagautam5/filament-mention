@@ -7,8 +7,10 @@
     mentionableItems: {{json_encode($getMentionableItems())}},
     triggerWith: '{{$triggerWith()}}',
     pluck: '{{$getPluck()}}',
+    avatar: '{{$getAvatar()}}',
     })"
     x-ingore
 >
+
 @include('filament-forms::components.rich-editor')
 </div>

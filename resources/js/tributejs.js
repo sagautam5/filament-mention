@@ -4,13 +4,15 @@ import Tribute from "tributejs";
 export default function mention({
                                     fieldName,
                                     mentionableItems,
-    triggerWith,
-    pluck,
+                                    triggerWith,
+                                    pluck,
+                                    avatar,
                                 }) {
     return {
         fieldName,
         mentionableItems,
         pluck,
+        avatar,
         init() {
             const id = this.fieldName;
             const tribute = new Tribute({
@@ -24,8 +26,9 @@ export default function mention({
                 menuItemTemplate: function (item) {
                     return `
                             <div style="display: flex; align-items: center;">
-                                <img src="${item.original.image}" alt="${item.original.key}"
-                                     style="width: 24px; height: 24px; border-radius: 50%; margin-right: 8px;" />
+
+                        ${avatar ? `<img src="${item.original.image}" alt="${item.original.key}" style="width: 24px; height: 24px; border-radius: 50%; margin-right: 8px;" />` : ''}
+
                                 <div>
                                     <div style="font-weight: bold;">${item.original.name}</div>
                                     <div style="font-size: 0.8em; color: #666;">@${item.original.key}</div>

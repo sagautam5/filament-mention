@@ -4,7 +4,6 @@ namespace Asmit\Mention\Forms\Components;
 
 use Filament\Forms\Components\RichEditor;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Log;
 
 class RichMention extends RichEditor
 {
@@ -12,13 +11,15 @@ class RichMention extends RichEditor
 
     protected array|\Closure $mentionsItems = [];
 
-    protected Builder | \Closure $query;
+    protected Builder|\Closure $query;
 
     protected string $modelClass;
 
     protected string $triggerWith = '@';
 
     protected ?string $pluck = null;
+
+    protected ?string $avatar = null;
 
     private string $pattern;
 
@@ -40,7 +41,7 @@ class RichMention extends RichEditor
     public function dehydrateState(array &$state, bool $isDehydrated = true): void
     {
         $rawState = $state['data'][$this->getName()];
-        if(!blank($this->getPluck())) {
+        if (!blank($this->getPluck())) {
             $state['data']['mentions'] = $this->extractMentions($rawState);
         }
         $state['data'][$this->getName()] = $this->removeIdFromText($rawState);
@@ -48,18 +49,20 @@ class RichMention extends RichEditor
 
     private function removeIdFromText(?string $text): string
     {
-        $this->pattern ='/\(--([a-zA-Z0-9_]+)--\)/';
+        $this->pattern = '/\(--([a-zA-Z0-9_]+)--\)/';
         return preg_replace($this->pattern, '', $text);
     }
 
     // Function to extract all @mentions
-    protected function extractMentions(?string $text): array
+    private function extractMentions(?string $text): array
     {
-        $this->pattern ='/\(--([a-zA-Z0-9_]+)--\)/';
+        $this->pattern = '/\(--([a-zA-Z0-9_]+)--\)/';
         preg_match_all($this->pattern, $text, $matches);
 
-        // Return array of mentions
-        // $matches[1] contains all @usernames
+        /**
+         * Return array of mentions
+         * $matches[1] contains all @usernames
+         */
         return array_unique($matches[1]);
     }
 
@@ -95,5 +98,25 @@ class RichMention extends RichEditor
     public function getPluck(): ?string
     {
         return $this->evaluate($this->pluck);
+    }
+
+    public function avatar(string $key): static
+    {
+        $this->avatar = $key;
+
+        return $this;
+    }
+
+
+    /**
+     * @throws \Exception
+     */
+    public function getAvatar(): ?string
+    {
+        $avatar = $this->evaluate($this->avatar);
+       if(!array_key_exists($avatar, $this->getMentionableItems()[0]) && !blank($avatar)) {
+           throw new \Exception("$avatar key not found in mentionsItems array");
+        }
+        return $avatar;
     }
 }
