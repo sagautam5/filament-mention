@@ -1,34 +1,28 @@
+// /components/my-component.js
 import Tribute from "tributejs";
 
-export default function mention({ id, mentionItems }) {
+export default function mention({
+                                    fieldName,
+                                    mentionableItems,
+    triggerWith,
+    pluck,
+                                }) {
     return {
-        id,
-        mentionItems,
-
+        fieldName,
+        mentionableItems,
+        pluck,
         init() {
-            this.$nextTick(() => {
-                const inputElement = document.getElementById(this.id);
-                if (!inputElement) {
-                    console.error(`[Tribute] Element with id '${this.id}' not found!`);
-                    return;
-                }
-
-                const tribute = new Tribute({
-                    values: (text, cb) => {
-                        console.log("Searching:", text);
-
-                        const lowerText = text.toLowerCase(); // Convert input to lowercase
-
-                        const filteredItems = this.mentionItems.filter(user =>
-                            user.key.toLowerCase().includes(lowerText) ||
-                            user.name.toLowerCase().includes(lowerText)
-                        );
-
-                        cb(filteredItems);
-                    },
-
-                    menuItemTemplate: function(item) {
-                        return `
+            const id = this.fieldName;
+            const tribute = new Tribute({
+                trigger: triggerWith,
+                values: function (text, cb) {
+                    // Call the getMentionsItems method to filter users
+                    const items = mentionableItems // Get all items initially
+                        .filter(user => user.key.includes(text) || user.name.includes(text)); // Filter based on text input
+                    cb(items);
+                },
+                menuItemTemplate: function (item) {
+                    return `
                             <div style="display: flex; align-items: center;">
                                 <img src="${item.original.image}" alt="${item.original.key}"
                                      style="width: 24px; height: 24px; border-radius: 50%; margin-right: 8px;" />
@@ -38,16 +32,15 @@ export default function mention({ id, mentionItems }) {
                                 </div>
                             </div>
                         `;
-                    },
+                },
 
-                    selectTemplate: function(item) {
-                        if (!item) return null;
-                        return `<a href="${item.original.link}(--${item.original.id}--)" data-trix-attribute="bold">@${item.original.key}</a>`;
-                    },
-                });
-
-                tribute.attach(inputElement);
+                selectTemplate: function (item) {
+                    if (typeof item === "undefined") return null;
+                    return `<a href="${item.original.link}(--${item.original[pluck]}--)" data-trix-attribute="bold">@${item.original.key}</a>`;
+                },
             });
+
+            tribute.attach(document.getElementById(id));
         }
-    };
+    }
 }

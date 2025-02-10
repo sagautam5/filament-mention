@@ -1,7 +1,13 @@
+@use('Filament\Support\Facades\FilamentAsset')
 <div
     ax-load
-    ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('tributejs', 'asmit/mention') }}"
-    x-data="mention({ id: '{{ $getId() }}', mentionItems: {{json_encode($getMentionsItems())}} })"
+    ax-load-src="{{ FilamentAsset::getAlpineComponentSrc('tributejs', 'asmit/mention') }}"
+    x-data="mention({
+    fieldName: '{{ $getId() }}',
+    mentionableItems: {{json_encode($getMentionableItems())}},
+    triggerWith: '{{$triggerWith()}}',
+    pluck: '{{$getPluck()}}',
+    })"
     x-ingore
 >
 @include('filament-forms::components.rich-editor')

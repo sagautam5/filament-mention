@@ -16,21 +16,15 @@ class RichMention extends RichEditor
 
     protected string $modelClass;
 
+    protected string $triggerWith = '@';
+
+    protected ?string $pluck = null;
+
+    private string $pattern;
+
     public function modelClass(string $modelClass): static
     {
         $this->modelClass = $modelClass;
-
-        return $this;
-    }
-
-    public function getModelClass(): string
-    {
-        return $this->evaluate($this->modelClass);
-    }
-
-    public function modifyingQuery(Builder | \Closure $query)
-    {
-        $this->query = $query;
 
         return $this;
     }
@@ -46,29 +40,31 @@ class RichMention extends RichEditor
     public function dehydrateState(array &$state, bool $isDehydrated = true): void
     {
         $rawState = $state['data'][$this->getName()];
-        $state['data']['mentions'] = $this->extractMentions($rawState);
+        if(!blank($this->getPluck())) {
+            $state['data']['mentions'] = $this->extractMentions($rawState);
+        }
         $state['data'][$this->getName()] = $this->removeIdFromText($rawState);
     }
 
-    private function removeIdFromText(?string $text)
+    private function removeIdFromText(?string $text): string
     {
-        $pattern = '/\(--(\d+)--\)/';
-        return preg_replace($pattern, '', $text);
+        $this->pattern ='/\(--([a-zA-Z0-9_]+)--\)/';
+        return preg_replace($this->pattern, '', $text);
     }
 
     // Function to extract all @mentions
     protected function extractMentions(?string $text): array
     {
-        $pattern = '/\(--(\d+)--\)/';
-        preg_match_all($pattern, $text, $matches);
+        $this->pattern ='/\(--([a-zA-Z0-9_]+)--\)/';
+        preg_match_all($this->pattern, $text, $matches);
+
         // Return array of mentions
-        return array_unique($matches[1]);  // $matches[1] contains all @usernames
+        // $matches[1] contains all @usernames
+        return array_unique($matches[1]);
     }
 
-    public function getMentionsItems(string $input = ''): array
+    public function getMentionableItems(string $input = ''): array
     {
-
-        Log::info('Mentions Items: ' . $input);
         if ($this->mentionsItems instanceof \Closure) {
             return ($this->mentionsItems)($input);
         }
@@ -76,11 +72,28 @@ class RichMention extends RichEditor
         return $this->mentionsItems;
     }
 
-//    public function getQuery()
-//    {
-//        if($this->query instanceof \Closure) {
-//            return ($this->query)();
-//        }
-//        return $this->query;
-//    }
+    public function triggerWith(): string
+    {
+        return $this->triggerWith;
+    }
+
+    /**
+     * @param string|\Closure $key
+     * @return $this
+     * The key must be included in the mentionsItems array
+     */
+    public function pluck(string|\Closure $key): static
+    {
+        $this->pluck = $key;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPluck(): ?string
+    {
+        return $this->evaluate($this->pluck);
+    }
 }
