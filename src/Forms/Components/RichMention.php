@@ -42,7 +42,7 @@ class RichMention extends RichEditor
     {
         $rawState = $state['data'][$this->getName()];
         if (!blank($this->getPluck())) {
-            $state['data']['mentions'] = $this->extractMentions($rawState);
+            $state['data']['mentions.'.$this->getName()] = $this->extractMentions($rawState);
         }
         $state['data'][$this->getName()] = $this->removeIdFromText($rawState);
     }
