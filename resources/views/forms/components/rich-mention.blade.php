@@ -1,5 +1,6 @@
 @use('Filament\Support\Facades\FilamentAsset')
 <div
+    class=""
     ax-load
     ax-load-src="{{ FilamentAsset::getAlpineComponentSrc('tributejs', 'asmit/mention') }}"
     x-data="mention({
