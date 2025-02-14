@@ -10,6 +10,7 @@
         menuShowMinLength: '{{ $getMenuShowMinLength() }}',
         menuItemLimit: '{{ $getMenuItemLimit() }}',
         lookupKey: '{{ $getLookupKey() }}',
+        displayName: '{{ $getDisplayName() }}',
     })"
     x-ignore
 >

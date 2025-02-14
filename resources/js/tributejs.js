@@ -1,11 +1,11 @@
 import Tribute from "tributejs";
 
-function generateMenuItemTemplate(item, avatar, lookupKey) {
+function generateMenuItemTemplate(item, avatar, lookupKey, displayName) {
     return `
         <div class='mention-item'>
-            ${avatar ? `<img class="mention-item__avatar" src="${item.original.image}" alt="${item.original.key}"/>` : ''}
+            ${avatar ? `<img class="mention-item__avatar" src="${item.original.image}" alt="${item.original[lookupKey]}"/>` : ''}
             <div class='mention-item__info'>
-                <div class='mention-item__info-name'>${item.original.name}</div>
+                <div class='mention-item__info-name'>${item.original[displayName]}</div>
                 <div class='mention-item__info-email'>@${item.original[lookupKey]}</div>
             </div>
         </div>
@@ -17,7 +17,7 @@ function generateSelectTemplate(item, pluck, lookupKey) {
     return `<a href="${item.original.url}(--${item.original[pluck]}--)" data-trix-attribute="bold">@${item.original[lookupKey]}</a>`;
 }
 
-function createTribute({ fieldName, triggerWith, pluck, avatar, menuShowMinLength,menuItemLimit, lookupKey, valuesFunction }) {
+function createTribute({ fieldName, triggerWith, pluck, avatar, menuShowMinLength, menuItemLimit, lookupKey, displayName, valuesFunction }) {
     const targetElement = document.getElementById(fieldName);
     const tribute = new Tribute({
         trigger: triggerWith,
@@ -26,7 +26,7 @@ function createTribute({ fieldName, triggerWith, pluck, avatar, menuShowMinLengt
         menuItemLimit:menuItemLimit,
         loadingItemTemplate: `<div class="loading-item">Loading...</div>`,
         lookup: lookupKey,
-        menuItemTemplate: (item) => generateMenuItemTemplate(item, avatar, lookupKey),
+        menuItemTemplate: (item) => generateMenuItemTemplate(item, avatar, lookupKey, displayName),
         selectTemplate: (item) => generateSelectTemplate(item, pluck, lookupKey),
         noMatchTemplate: () => `<span class="no-match">No results found</span>`
     });
@@ -67,7 +67,8 @@ export function mention({
                             avatar,
                             menuShowMinLength,
                             menuItemLimit,
-                            lookupKey
+                            lookupKey,
+                            displayName
                         }) {
     return {
         fieldName,
@@ -76,6 +77,7 @@ export function mention({
         menuShowMinLength,
         lookupKey,
         menuItemLimit,
+        displayName,
         init() {
             createTribute({
                 fieldName: this.fieldName,
@@ -84,6 +86,7 @@ export function mention({
                 avatar,
                 menuShowMinLength,
                 lookupKey,
+                displayName,
                 menuItemLimit,
                 valuesFunction: (text, cb) => {
                     const items = mentionableItems.filter(user =>
@@ -103,12 +106,17 @@ export function fetchMention({
                                  avatar,
                                  menuShowMinLength,
                                  menuItemLimit,
-                                 lookupKey
+                                 lookupKey,
+                                 displayName
                              }) {
     return {
         fieldName,
         pluck,
         avatar,
+        menuShowMinLength,
+        menuItemLimit,
+        lookupKey,
+        displayName,
         init() {
             const alpine = this.$wire;
             createTribute({
@@ -119,6 +127,7 @@ export function fetchMention({
                 menuShowMinLength,
                 menuItemLimit,
                 lookupKey,
+                displayName,
                 valuesFunction: (text, cb) => {
                     alpine.getMentionableItems(text).then(items => {
                         cb(items);

@@ -18,7 +18,8 @@ class MentionServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('asmit-mention')
-            ->hasViews();
+            ->hasViews()
+        ->hasConfigFile(['mention']);
     }
     public function packageBooted()
     {

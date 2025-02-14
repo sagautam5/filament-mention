@@ -21,13 +21,15 @@ class RichMention extends RichEditor
 
     protected ?string $avatar = null;
 
-    private string $pattern;
+    private string $pattern = '/\(--([a-zA-Z0-9_\.]+)--\)/';
 
-    protected int $menuShowMinLength = 2;
+    protected ?int $menuShowMinLength = null;
 
-    protected string $lookupKey = 'key';
+    protected ?string $lookupKey = null;
 
-    protected int $menuItemLimit = 10;
+    protected ?string $displayName = null;
+
+    protected ?int $menuItemLimit = null;
 
     public function modelClass(string $modelClass): static
     {
@@ -55,14 +57,12 @@ class RichMention extends RichEditor
 
     private function removeIdFromText(?string $text): string
     {
-        $this->pattern = '/\(--([a-zA-Z0-9_]+)--\)/';
         return preg_replace($this->pattern, '', $text);
     }
 
     // Function to extract all @mentions
     private function extractMentions(?string $text): array
     {
-        $this->pattern = '/\(--([a-zA-Z0-9_]+)--\)/';
         preg_match_all($this->pattern, $text, $matches);
 
         /**
@@ -119,7 +119,7 @@ class RichMention extends RichEditor
      */
     public function getAvatar(): ?string
     {
-        $avatar = $this->evaluate($this->avatar);
+        $avatar = $this->evaluate($this->avatar) ?? config('mention.default.avatar');
        if(!array_key_exists($avatar, $this->getMentionableItems()[0]) && !blank($avatar)) {
            throw new \Exception("$avatar key not found in mentionsItems array");
         }
@@ -134,7 +134,7 @@ class RichMention extends RichEditor
 
     public function getMenuShowMinLength():int
     {
-        return $this->menuShowMinLength;
+        return $this->menuShowMinLength ?? config('mention.default.menu_show_min_length');
     }
 
     public function lookupKey(string $key):self
@@ -143,9 +143,9 @@ class RichMention extends RichEditor
         return $this;
     }
 
-    public function getLookupKey():string
+    public function getLookupKey():?string
     {
-        return $this->lookupKey;
+        return $this->lookupKey ?? config('mention.default.lookup_key');
     }
 
     public function menuItemLimit(int $limit):self
@@ -156,7 +156,17 @@ class RichMention extends RichEditor
 
     public function getMenuItemLimit():int
     {
-        return $this->menuItemLimit;
+        return $this->menuItemLimit ?? config('mention.default.menu_item_limit');
+    }
+
+    public function displayName(string $name):self
+    {
+        $this->displayName = $name;
+        return $this;
+    }
+    public function getDisplayName(): ?string
+    {
+        return $this->displayName ?? config('mention.default.display_name');
     }
 }
 
