@@ -31,9 +31,8 @@ class RichMention extends RichEditor
 
     protected ?int $menuItemLimit = null;
 
-
     /**
-     * @param array<string, mixed>|\Closure $mentionsItems
+     * @param  array<string, mixed>|\Closure  $mentionsItems
      * @return $this
      */
     public function mentionsItems(array|\Closure $mentionsItems): static
@@ -57,9 +56,7 @@ class RichMention extends RichEditor
         return preg_replace($this->pattern, '', $text ?? '');
     }
 
-
     /**
-     * @param string|null $text
      * @return array<int, mixed>
      */
     private function extractMentions(?string $text): array
@@ -74,7 +71,6 @@ class RichMention extends RichEditor
     }
 
     /**
-     * @param string $input
      * @return array<string|int, mixed>
      */
     public function getMentionableItems(string $input = ''): array
