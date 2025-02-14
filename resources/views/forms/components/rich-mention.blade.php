@@ -2,7 +2,7 @@
 <div
     class=""
     ax-load
-    ax-load-src="{{ FilamentAsset::getAlpineComponentSrc(id:'tributejs', package: 'asmit/mention') }}"
+    ax-load-src="{{ FilamentAsset::getAlpineComponentSrc(id:'asmit-mention', package: 'asmit/mention') }}"
     x-load-css="[@js(FilamentAsset::getStyleHref(id:'asmit-mention', package: 'asmit/mention'))]"
     x-data="mention({
     fieldName: '{{ $getId() }}',
