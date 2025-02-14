@@ -2,11 +2,11 @@ import Tribute from "tributejs";
 
 function generateMenuItemTemplate(item, avatar) {
     return `
-        <div style="display: flex; align-items: center;">
-            ${avatar ? `<img src="${item.original.image}" alt="${item.original.key}" style="width: 24px; height: 24px; border-radius: 50%; margin-right: 8px;" />` : ''}
-            <div>
-                <div style="font-weight: bold;">${item.original.name}</div>
-                <div style="font-size: 0.8em; color: #666;">@${item.original.key}</div>
+        <div class='mention-item' style="display: flex; align-items: center;">
+            ${avatar ? `<img class="mention-item__avatar" src="${item.original.image}" alt="${item.original.key}" style="width: 24px; height: 24px; border-radius: 50%; margin-right: 8px;" />` : ''}
+            <div class='mention-item__info'>
+                <div class='mention-item__info-name' style="font-weight: bold;">${item.original.name}</div>
+                <div class='mention-item__info-email' style="font-size: 0.8em; color: #666;">@${item.original.key}</div>
             </div>
         </div>
     `;
@@ -18,14 +18,17 @@ function generateSelectTemplate(item, pluck) {
 }
 
 function createTribute({ fieldName, triggerWith, pluck, avatar, valuesFunction }) {
+    const targetElement = document.getElementById(fieldName)
     const tribute = new Tribute({
         trigger: triggerWith,
         values: valuesFunction,
         menuItemTemplate: (item) => generateMenuItemTemplate(item, avatar),
         selectTemplate: (item) => generateSelectTemplate(item, pluck),
+        noMatchTemplate: () => `<span class="no-match">No results found</span>`
     });
-
-    tribute.attach(document.getElementById(fieldName));
+    tribute.attach(targetElement);
+    targetElement.addEventListener("tribute-active-true", () => tribute.menu.classList.add('tribute-active'));
+    targetElement.addEventListener("tribute-active-false", () => tribute.menu.classList.remove('tribute-active'));
 }
 
 export function mention({
