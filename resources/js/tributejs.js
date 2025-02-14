@@ -1,29 +1,33 @@
 import Tribute from "tributejs";
 
-function generateMenuItemTemplate(item, avatar) {
+function generateMenuItemTemplate(item, avatar, lookupKey) {
     return `
         <div class='mention-item'>
             ${avatar ? `<img class="mention-item__avatar" src="${item.original.image}" alt="${item.original.key}"/>` : ''}
             <div class='mention-item__info'>
                 <div class='mention-item__info-name'>${item.original.name}</div>
-                <div class='mention-item__info-email'>@${item.original.key}</div>
+                <div class='mention-item__info-email'>@${item.original[lookupKey]}</div>
             </div>
         </div>
     `;
 }
 
-function generateSelectTemplate(item, pluck) {
+function generateSelectTemplate(item, pluck, lookupKey) {
     if (typeof item === "undefined") return null;
-    return `<a href="${item.original.link}(--${item.original[pluck]}--)" data-trix-attribute="bold">@${item.original.key}</a>`;
+    return `<a href="${item.original.url}(--${item.original[pluck]}--)" data-trix-attribute="bold">@${item.original[lookupKey]}</a>`;
 }
 
-function createTribute({ fieldName, triggerWith, pluck, avatar, valuesFunction }) {
+function createTribute({ fieldName, triggerWith, pluck, avatar, menuShowMinLength,menuItemLimit, lookupKey, valuesFunction }) {
     const targetElement = document.getElementById(fieldName);
     const tribute = new Tribute({
         trigger: triggerWith,
         values: valuesFunction,
-        menuItemTemplate: (item) => generateMenuItemTemplate(item, avatar),
-        selectTemplate: (item) => generateSelectTemplate(item, pluck),
+        menuShowMinLength: menuShowMinLength,
+        menuItemLimit:menuItemLimit,
+        loadingItemTemplate: `<div class="loading-item">Loading...</div>`,
+        lookup: lookupKey,
+        menuItemTemplate: (item) => generateMenuItemTemplate(item, avatar, lookupKey),
+        selectTemplate: (item) => generateSelectTemplate(item, pluck, lookupKey),
         noMatchTemplate: () => `<span class="no-match">No results found</span>`
     });
     tribute.attach(targetElement);
@@ -61,20 +65,29 @@ export function mention({
                             triggerWith,
                             pluck,
                             avatar,
+                            menuShowMinLength,
+                            menuItemLimit,
+                            lookupKey
                         }) {
     return {
         fieldName,
         pluck,
         avatar,
+        menuShowMinLength,
+        lookupKey,
+        menuItemLimit,
         init() {
             createTribute({
                 fieldName: this.fieldName,
                 triggerWith,
                 pluck,
                 avatar,
+                menuShowMinLength,
+                lookupKey,
+                menuItemLimit,
                 valuesFunction: (text, cb) => {
                     const items = mentionableItems.filter(user =>
-                        user.key.includes(text) || user.name.includes(text)
+                        user[lookupKey].includes(text)
                     );
                     cb(items);
                 }
@@ -85,10 +98,12 @@ export function mention({
 
 export function fetchMention({
                                  fieldName,
-                                 mentionableItems,
                                  triggerWith,
                                  pluck,
                                  avatar,
+                                 menuShowMinLength,
+                                 menuItemLimit,
+                                 lookupKey
                              }) {
     return {
         fieldName,
@@ -101,6 +116,9 @@ export function fetchMention({
                 triggerWith,
                 pluck,
                 avatar,
+                menuShowMinLength,
+                menuItemLimit,
+                lookupKey,
                 valuesFunction: (text, cb) => {
                     alpine.getMentionableItems(text).then(items => {
                         cb(items);

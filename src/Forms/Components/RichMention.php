@@ -23,6 +23,12 @@ class RichMention extends RichEditor
 
     private string $pattern;
 
+    protected int $menuShowMinLength = 2;
+
+    protected string $lookupKey = 'key';
+
+    protected int $menuItemLimit = 10;
+
     public function modelClass(string $modelClass): static
     {
         $this->modelClass = $modelClass;
@@ -119,4 +125,38 @@ class RichMention extends RichEditor
         }
         return $avatar;
     }
+
+    public function menuShowMinLength(int $length = 2):self
+    {
+        $this->menuShowMinLength = $length;
+        return $this;
+    }
+
+    public function getMenuShowMinLength():int
+    {
+        return $this->menuShowMinLength;
+    }
+
+    public function lookupKey(string $key):self
+    {
+        $this->lookupKey = $key;
+        return $this;
+    }
+
+    public function getLookupKey():string
+    {
+        return $this->lookupKey;
+    }
+
+    public function menuItemLimit(int $limit):self
+    {
+        $this->menuItemLimit = $limit;
+        return $this;
+    }
+
+    public function getMenuItemLimit():int
+    {
+        return $this->menuItemLimit;
+    }
 }
+

@@ -4,9 +4,12 @@
     ax-load-src="{{ FilamentAsset::getAlpineComponentSrc('tributejs', 'asmit/mention') }}"
     x-data="fetchMention({
         fieldName: '{{ $getId() }}',
-        triggerWith: '{{$triggerWith()}}',
-        pluck: '{{$getPluck()}}',
-        avatar: '{{$getAvatar()}}',
+       triggerWith: '{{ $triggerWith() }}',
+        pluck: '{{ $getPluck() }}',
+        avatar: '{{ $getAvatar() }}',
+        menuShowMinLength: '{{ $getMenuShowMinLength() }}',
+        menuItemLimit: '{{ $getMenuItemLimit() }}',
+        lookupKey: '{{ $getLookupKey() }}',
     })"
     x-ignore
 >

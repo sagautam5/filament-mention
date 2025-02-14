@@ -24,7 +24,7 @@ class MentionServiceProvider extends PackageServiceProvider
     {
         FilamentAsset::register([
             AlpineComponent::make(id:'tributejs', path: __DIR__.'/../dist/tributejs.js'),
-            Css::make(id:'asmit-mention', path: __DIR__.'/../dist/asmit-mention.css'),
+            Css::make(id:'asmit-mention', path: __DIR__.'/../resources/css/asmit-mention.css')->loadedOnRequest(),
         ], package: 'asmit/mention');
     }
 }
