@@ -5,8 +5,9 @@ namespace Asmit\Mention\Contracts;
 interface Mentionable
 {
     /**
-     * this must include key,id,nam
-     * * @return array<array{id: int|string, key: string, image:string|null, link: string|null}>
+     * This must include name, username, image, url
+     * @param string|null $searchKey
+     * @return array<array<string, mixed>>
      */
-    public function getMentionableItems(?string $searchKey):array;
+    public function getMentionableItems(?string $searchKey): array;
 }

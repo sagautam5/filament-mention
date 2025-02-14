@@ -68,7 +68,7 @@ export function mention({
                             menuShowMinLength,
                             menuItemLimit,
                             lookupKey,
-                            displayName
+                            displayName,
                         }) {
     return {
         fieldName,
@@ -79,6 +79,7 @@ export function mention({
         menuItemLimit,
         displayName,
         init() {
+            const alpine = this.$wire;
             createTribute({
                 fieldName: this.fieldName,
                 triggerWith,

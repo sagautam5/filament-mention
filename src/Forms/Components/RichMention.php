@@ -3,21 +3,21 @@
 namespace Asmit\Mention\Forms\Components;
 
 use Filament\Forms\Components\RichEditor;
-use Illuminate\Database\Eloquent\Builder;
 
 class RichMention extends RichEditor
 {
     protected string $view = 'asmit-mention::forms.components.rich-mention';
 
+    /**
+     * @var array<string, mixed>|\Closure
+     */
     protected array|\Closure $mentionsItems = [];
-
-    protected Builder|\Closure $query;
 
     protected string $modelClass;
 
     protected string $triggerWith = '@';
 
-    protected ?string $pluck = null;
+    protected string|null|\Closure $pluck = null;
 
     protected ?string $avatar = null;
 
@@ -31,13 +31,11 @@ class RichMention extends RichEditor
 
     protected ?int $menuItemLimit = null;
 
-    public function modelClass(string $modelClass): static
-    {
-        $this->modelClass = $modelClass;
 
-        return $this;
-    }
-
+    /**
+     * @param array<string, mixed>|\Closure $mentionsItems
+     * @return $this
+     */
     public function mentionsItems(array|\Closure $mentionsItems): static
     {
         $this->mentionsItems = $mentionsItems;
@@ -45,25 +43,28 @@ class RichMention extends RichEditor
         return $this;
     }
 
-
     public function dehydrateState(array &$state, bool $isDehydrated = true): void
     {
         $rawState = $state['data'][$this->getName()];
-        if (!blank($this->getPluck())) {
+        if (! blank($this->getPluck())) {
             $state['data']['mentions.'.$this->getName()] = $this->extractMentions($rawState);
         }
         $state['data'][$this->getName()] = $this->removeIdFromText($rawState);
     }
 
-    private function removeIdFromText(?string $text): string
+    private function removeIdFromText(?string $text): ?string
     {
-        return preg_replace($this->pattern, '', $text);
+        return preg_replace($this->pattern, '', $text ?? '');
     }
 
-    // Function to extract all @mentions
+
+    /**
+     * @param string|null $text
+     * @return array<int, mixed>
+     */
     private function extractMentions(?string $text): array
     {
-        preg_match_all($this->pattern, $text, $matches);
+        preg_match_all($this->pattern, $text ?? '', $matches);
 
         /**
          * Return array of mentions
@@ -72,6 +73,10 @@ class RichMention extends RichEditor
         return array_unique($matches[1]);
     }
 
+    /**
+     * @param string $input
+     * @return array<string|int, mixed>
+     */
     public function getMentionableItems(string $input = ''): array
     {
         if ($this->mentionsItems instanceof \Closure) {
@@ -87,9 +92,8 @@ class RichMention extends RichEditor
     }
 
     /**
-     * @param string|\Closure $key
      * @return $this
-     * The key must be included in the mentionsItems array
+     *               The key must be included in the mentionsItems array
      */
     public function pluck(string|\Closure $key): static
     {
@@ -98,9 +102,6 @@ class RichMention extends RichEditor
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getPluck(): ?string
     {
         return $this->evaluate($this->pluck);
@@ -113,60 +114,64 @@ class RichMention extends RichEditor
         return $this;
     }
 
-
     /**
      * @throws \Exception
      */
     public function getAvatar(): ?string
     {
         $avatar = $this->evaluate($this->avatar) ?? config('mention.default.avatar');
-       if(!array_key_exists($avatar, $this->getMentionableItems()[0]) && !blank($avatar)) {
-           throw new \Exception("$avatar key not found in mentionsItems array");
+        if (! array_key_exists($avatar, $this->getMentionableItems()[0]) && ! blank($avatar)) {
+            throw new \Exception("$avatar key not found in mentionsItems array");
         }
+
         return $avatar;
     }
 
-    public function menuShowMinLength(int $length = 2):self
+    public function menuShowMinLength(int $length = 2): self
     {
         $this->menuShowMinLength = $length;
+
         return $this;
     }
 
-    public function getMenuShowMinLength():int
+    public function getMenuShowMinLength(): int
     {
         return $this->menuShowMinLength ?? config('mention.default.menu_show_min_length');
     }
 
-    public function lookupKey(string $key):self
+    public function lookupKey(string $key): self
     {
         $this->lookupKey = $key;
+
         return $this;
     }
 
-    public function getLookupKey():?string
+    public function getLookupKey(): ?string
     {
         return $this->lookupKey ?? config('mention.default.lookup_key');
     }
 
-    public function menuItemLimit(int $limit):self
+    public function menuItemLimit(int $limit): self
     {
         $this->menuItemLimit = $limit;
+
         return $this;
     }
 
-    public function getMenuItemLimit():int
+    public function getMenuItemLimit(): ?int
     {
         return $this->menuItemLimit ?? config('mention.default.menu_item_limit');
     }
 
-    public function displayName(string $name):self
+    public function displayName(string $name): self
     {
         $this->displayName = $name;
+
         return $this;
     }
+
     public function getDisplayName(): ?string
     {
         return $this->displayName ?? config('mention.default.display_name');
     }
 }
-
