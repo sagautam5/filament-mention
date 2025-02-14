@@ -16,7 +16,6 @@
     .tribute-container {
         min-width: 250px;
         max-height: 20rem;
-        padding: .4rem;
         margin-top: 1rem;
         border-radius: 15px;
         overflow: hidden;
@@ -25,31 +24,29 @@
         pointer-events: none;
         transform: translateY(2rem);
         background-color: rgba(255,255,255,0.85);
-        box-shadow: 0 10px 30px rgba(0,0,20,.2),0 2px 10px rgba(0,0,20,.05),inset 0 -1px 2px hsla(0,0%,100%,.025);
         backdrop-filter: saturate(1.5) blur(20px);
         -webkit-backdrop-filter: saturate(1.5) blur(20px);
         transition: all .15s ease-in-out;
     }
     .tribute-container > ul { 
-        max-height: calc(20rem - 0.8rem);
+        max-height: inherit;
+        padding: .4rem;
         overflow: auto;
+        scrollbar-width: thin;
     }
     .tribute-container.tribute-active {
         opacity: 100;
         pointer-events: auto;
         transform: translateY(0);
+        box-shadow: 0 10px 30px rgba(0,0,20,.2),0 2px 10px rgba(0,0,20,.05),inset 0 -1px 2px hsla(0,0%,100%,.025);
     }
     .mention-item {
         display: flex;
         align-items: center;
         gap: calc(0.25rem * 1.5);
-        padding: calc(0.25rem * 1.5);
-        transition: all 0.15s ease-in-out;
+        padding: calc(0.3rem * 1.5) calc(0.4rem * 1.5);
         cursor: pointer;
-        border-radius: 14px;
-    }
-    .highlight .mention-item {
-        background-color: #f1f5f9;
+        border-radius: 10px;
     }
     .mention-item__avatar {
         min-height: calc(0.25rem * 7);
@@ -78,7 +75,7 @@
     .mention-item__info-email {
         font-size: 12px;
         margin-top: calc(0.25rem * -0.5);
-        opacity: 0.75;
+        color: rgba(0,0,0,0.55);
     }
     .no-match {
         display: flex;
@@ -87,6 +84,27 @@
         padding: 8 0;
         font-weight: 500;
         color: rgba(0,0,0,.5);
+    }
+    .highlight .mention-item {
+        background-color: rgba(245, 158, 11);
+    }
+    .highlight .mention-item__info-email,
+   .highlight .mention-item__info-name {
+        color: rgb(255, 255, 255)
+    }
+    .dark .tribute-container {
+        background-color: rgba(24, 24, 27, 0.83);
+        border: 1px solid #29292f;
+        box-shadow: 0 10px 30px rgba(27, 27, 32, 0.21),0 2px 10px rgba(0, 0, 0, 0.54),inset 0 -1px 2px hsla(0, 4.6%, 12.7%, 0.24);
+    }
+    .dark .mention-item__info-email {
+        color: rgba(255, 255, 255, 0.7);
+    }
+    .dark .mention-item__avatar {
+        background-color: #f2f2f2;
+    }
+    .dark .no-match {
+        color: rgba(255, 255, 255, 0.5);
     }
 </style>
 @include('filament-forms::components.rich-editor')

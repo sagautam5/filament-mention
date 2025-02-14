@@ -2,11 +2,11 @@ import Tribute from "tributejs";
 
 function generateMenuItemTemplate(item, avatar) {
     return `
-        <div class='mention-item' style="display: flex; align-items: center;">
-            ${avatar ? `<img class="mention-item__avatar" src="${item.original.image}" alt="${item.original.key}" style="width: 24px; height: 24px; border-radius: 50%; margin-right: 8px;" />` : ''}
+        <div class='mention-item'>
+            ${avatar ? `<img class="mention-item__avatar" src="${item.original.image}" alt="${item.original.key}"/>` : ''}
             <div class='mention-item__info'>
-                <div class='mention-item__info-name' style="font-weight: bold;">${item.original.name}</div>
-                <div class='mention-item__info-email' style="font-size: 0.8em; color: #666;">@${item.original.key}</div>
+                <div class='mention-item__info-name'>${item.original.name}</div>
+                <div class='mention-item__info-email'>@${item.original.key}</div>
             </div>
         </div>
     `;
