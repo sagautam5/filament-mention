@@ -115,12 +115,7 @@ class RichMention extends RichEditor
      */
     public function getAvatar(): ?string
     {
-        $avatar = $this->evaluate($this->avatar) ?? config('mention.default.avatar');
-        if (! array_key_exists($avatar, $this->getMentionableItems()[0]) && ! blank($avatar)) {
-            throw new \Exception("$avatar key not found in mentionsItems array");
-        }
-
-        return $avatar;
+        return $this->evaluate($this->avatar) ?? config('mention.default.avatar');
     }
 
     public function menuShowMinLength(int $length = 2): self

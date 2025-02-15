@@ -8,6 +8,9 @@ class FetchRichMention extends RichMention
 
     public function getAvatar(): ?string
     {
+        if(!method_exists($this->getLivewire(), 'getMentionableItems')) {
+            throw new \Exception('You must implement Mentionable contract in your Livewire component' );
+        }
         return $this->evaluate($this->avatar);
     }
 }
