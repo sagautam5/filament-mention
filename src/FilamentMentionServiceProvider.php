@@ -9,14 +9,14 @@ use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
-class MentionServiceProvider extends PackageServiceProvider
+class FilamentMentionServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
         $package
             ->name('asmit-filament-mention')
             ->hasViews()
-            ->hasConfigFile(['mention'])
+            ->hasConfigFile(['filament-mention'])
             ->hasInstallCommand(function (InstallCommand $installCommand) {
                 $installCommand->startWith(function (InstallCommand $command) {
                     $command->info('Hello, and welcome to my great new package!');
@@ -36,7 +36,7 @@ class MentionServiceProvider extends PackageServiceProvider
     {
         FilamentAsset::register([
             AlpineComponent::make(id: 'asmit-filament-mention', path: __DIR__.'/../dist/tributejs.js'),
-            Css::make(id: 'asmit-filament-mention', path: __DIR__.'/../resources/css/asmit-mention.css')->loadedOnRequest(),
+            Css::make(id: 'asmit-filament-mention', path: __DIR__ . '/../resources/css/asmit-filament-mention.css')->loadedOnRequest(),
         ], package: 'asmit/filament-mention');
     }
 }

@@ -21,7 +21,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Asmit\\Mention\\MentionServiceProvider"
+                "FilamentMentionServiceProvider"
             ]
         }
     }

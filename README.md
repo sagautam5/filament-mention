@@ -34,13 +34,13 @@ The **Mention** plugin allows you to easily mention users in your Filament appli
    ```
 3. Publish the configuration file:
    ```bash
-   php artisan vendor:publish --provider="Asmit\Mention\MentionServiceProvider" --tag="asmit-filament-mention-config"
+   php artisan vendor:publish --provider="Asmit\Mention\FilamentMentionServiceProvider" --tag="asmit-filament-mention-config"
    ```
-This will create a `mention.php` file in your `config` directory. You can customize the configuration according to your needs.
+This will create a `filament-mention.php` file in your `config` directory. You can customize the configuration according to your needs.
 
 ---
 ## Configuration
-The configuration file (config/mention.php) allows you to customize the plugin behavior. Here’s an example configuration:
+The configuration file (``config/filament-mention.php``) allows you to customize the plugin behavior. Here’s an example configuration:
 ```php
 return [
     'mentionable' => [
@@ -178,4 +178,4 @@ The MIT License (MIT). Please see [License File](LICENSE.txt) for more informati
 <i>Made with love by Asmit Nepali</i>
 
 [link-asmit]: https://github.com/AsmitNepali
-[link-kishan]: https://github.con/kishan
+[link-kishan]: https://github.com/Ksunar

@@ -72,7 +72,7 @@
     color: rgba(0,0,0,.5);
 }
     .highlight .mention-item {
-    background-color: #F59E0B;
+    background-color: oklch(0.707 0.022 261.325);;
 }
     .highlight .mention-item__info-email,
     .highlight .mention-item__info-name {
