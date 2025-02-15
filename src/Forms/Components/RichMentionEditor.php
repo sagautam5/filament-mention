@@ -12,7 +12,7 @@ class RichMentionEditor extends RichEditor
     /**
      * @var array<string, mixed>|\Closure
      */
-    protected array|\Closure $mentionsItems = [];
+    protected array|\Closure $mentionItems = [];
 
     protected string $modelClass;
 
@@ -38,7 +38,7 @@ class RichMentionEditor extends RichEditor
      */
     public function mentionsItems(array|\Closure $mentionsItems): static
     {
-        $this->mentionsItems = $mentionsItems;
+        $this->mentionItems = $mentionsItems;
 
         return $this;
     }
@@ -76,11 +76,11 @@ class RichMentionEditor extends RichEditor
      */
     public function getMentionableItems(string $input = ''): array
     {
-        if ($this->mentionsItems instanceof \Closure) {
-            return ($this->mentionsItems)($input);
+        if ($this->mentionItems instanceof \Closure) {
+            return ($this->mentionItems)($input);
         }
-        if (blank($this->mentionsItems)) {
-            $this->mentionsItems = (resolve(config('mention.mentionable.model')))
+        if (blank($this->mentionItems)) {
+            $this->mentionItems = (resolve(config('mention.mentionable.model')))
                 ->query()->get()->map(function ($item) {
                     return [
                         'id' => $id = $item->{config('mention.mentionable.column.id')},
@@ -91,7 +91,7 @@ class RichMentionEditor extends RichEditor
                     ];
                 })->toArray();
         }
-        return $this->mentionsItems;
+        return $this->mentionItems;
     }
 
     public function triggerWith(): string
