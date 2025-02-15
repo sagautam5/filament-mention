@@ -74,7 +74,7 @@ return [
  - ``default.menu_show_min_length``: Minimum characters to type before showing suggestions.
  - ``default.menu_item_limit``: Maximum number of suggestions to display.
 
-### Recommended:
+### Recommendations:
 - **Use cache to store the mentionable data for static search.**
 - **Add indexes to the columns used for dynamic search.**
 
