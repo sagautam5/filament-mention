@@ -2,7 +2,7 @@
 The **Mention** plugin allows you to easily mention users in your Filament application using the Filament RichText editor. It supports extracting specific fields from the mentioned user, such as their username, and id. The plugin offers both **static search** (preloaded data) and **dynamic search** (real-time database queries) for mentions.
 
 ---
-![Filament Mention Plugin](https://raw.githubusercontent.com/AsmitNepali/filament-mention/refs/heads/dev/images/cover.jpeg?token=GHSAT0AAAAAAC6PK4PRQUVCAOQNBHO4TH2QZ5QSKBA)
+![Filament Mention Plugin](https://raw.githubusercontent.com/AsmitNepali/filament-mention/refs/heads/dev/images/cover.jpg?token=GHSAT0AAAAAAC6PK4PQ74J3WUPK2EUA5YKGZ5QW6RQ)
 
 ## Features
 - **Mention users** in the Filament RichText editor.
