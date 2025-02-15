@@ -1,4 +1,4 @@
-# Filament Mention Plugin
+# Filament Mention
 The **Mention** plugin allows you to easily mention users in your Filament application using the Filament RichText editor. It supports extracting specific fields from the mentioned user, such as their username, and id. The plugin offers both **static search** (preloaded data) and **dynamic search** (real-time database queries) for mentions.
 
 ---
@@ -143,4 +143,37 @@ FetchMentionEditor::make('Fetch')
     ->columnSpanFull(),
 ```
 > You can override the method ``getMentionableItems`` in your livewire page to fetch the mentionable data.
+___
+## Pluck
+The plugin allows you to extract specific fields from the mentioned user. You can use the ``pluck`` method to extract the fields.
+This feature helps you to customize the mention output according to your needs.
 
+```php
+use Asmit\Mention\Forms\Components\FetchMentionEditor;
+
+FetchMentionEditor::make('note')
+            ->pluck('id')
+```
+The ``pluck`` method accepts the ``key`` name to extract the field from the mentioned user.
+
+It will add the new data attribute named ``mentions_[YOUR FIELD NAME]``. You can use this attribute to get the extracted field from the mentioned user.
+
+## Credits
+- [Asmit Nepal][link-asmit]
+- [Kishan Sunar][link-kishan]
+
+### Security
+
+If you discover a security vulnerability within this package, please send an e-mail to asmitnepali99@gmail.com, All security vulnerabilities will be promptly addressed.
+
+### 🤝 Contributing
+Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+
+### 📄 License
+The MIT License (MIT). Please see [License File](LICENSE.txt) for more information.
+
+
+<i>Made with love by Asmit Nepali</i>
+
+[link-asmit]: https://github.com/AsmitNepali
+[link-kishan]: https://github.con/kishan

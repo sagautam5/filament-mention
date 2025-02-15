@@ -1,9 +1,8 @@
 @use('Filament\Support\Facades\FilamentAsset')
 <div
-    class=""
     ax-load
-    ax-load-src="{{ FilamentAsset::getAlpineComponentSrc(id:'asmit-mention', package: 'asmit/mention') }}"
-    x-load-css="[@js(FilamentAsset::getStyleHref(id:'asmit-mention', package: 'asmit/mention'))]"
+    ax-load-src="{{ FilamentAsset::getAlpineComponentSrc(id:'asmit-filament-mention', package: 'asmit/filament-mention') }}"
+    x-load-css="[@js(FilamentAsset::getStyleHref(id:'asmit-filament-mention', package: 'asmit/filament-mention'))]"
     x-data="mention({
     fieldName: '{{ $getId() }}',
     mentionableItems: {{ json_encode($getMentionableItems()) }},

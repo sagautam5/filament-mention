@@ -7,7 +7,7 @@ use Filament\Forms\Components\RichEditor;
 
 class RichMentionEditor extends RichEditor
 {
-    protected string $view = 'asmit-mention::forms.components.rich-mention';
+    protected string $view = 'asmit-filament-mention::forms.components.rich-mention';
 
     /**
      * @var array<string, mixed>|\Closure
@@ -47,7 +47,7 @@ class RichMentionEditor extends RichEditor
     {
         $rawState = $state['data'][$this->getName()];
         if (!blank($this->getPluck())) {
-            $state['data']['mentions.' . $this->getName()] = $this->extractMentions($rawState);
+            $state['data']['mentions_' . $this->getName()] = $this->extractMentions($rawState);
         }
         $state['data'][$this->getName()] = $this->removeIdFromText($rawState);
     }

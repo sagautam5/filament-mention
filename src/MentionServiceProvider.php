@@ -14,7 +14,7 @@ class MentionServiceProvider extends PackageServiceProvider
     public function configurePackage(Package $package): void
     {
         $package
-            ->name('asmit-mention')
+            ->name('asmit-filament-mention')
             ->hasViews()
             ->hasConfigFile(['mention'])
             ->hasInstallCommand(function (InstallCommand $installCommand) {
@@ -35,8 +35,8 @@ class MentionServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         FilamentAsset::register([
-            AlpineComponent::make(id: 'asmit-mention', path: __DIR__.'/../dist/tributejs.js'),
-            Css::make(id: 'asmit-mention', path: __DIR__.'/../resources/css/asmit-mention.css')->loadedOnRequest(),
-        ], package: 'asmit/mention');
+            AlpineComponent::make(id: 'asmit-filament-mention', path: __DIR__.'/../dist/tributejs.js'),
+            Css::make(id: 'asmit-filament-mention', path: __DIR__.'/../resources/css/asmit-mention.css')->loadedOnRequest(),
+        ], package: 'asmit/filament-mention');
     }
 }
