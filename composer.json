@@ -5,13 +5,14 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Asmit\\Mention\\": "src/"
+            "Asmit\\FilamentMention\\": "src/"
         }
     },
     "authors": [
         {
             "name": "AsmitNepali",
-            "email": "33512152+AsmitNepali@users.noreply.github.com"
+            "homepage": "https://github.com/asmitnepali",
+            "role": "Software Engineer"
         }
     ],
     "minimum-stability": "dev",

@@ -1,8 +1,6 @@
 <?php
 
-namespace Asmit\Mention\Forms\Components;
-
-use Asmit\Mention\Contracts\Mentionable;
+namespace Asmit\FilamentMention\Forms\Components;
 
 class FetchMentionEditor extends RichMentionEditor
 {

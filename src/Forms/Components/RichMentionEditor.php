@@ -1,8 +1,8 @@
 <?php
 
-namespace Asmit\Mention\Forms\Components;
+namespace Asmit\FilamentMention\Forms\Components;
 
-use Asmit\Mention\Helpers\Helper;
+use Asmit\FilamentMention\Helpers\Helper;
 use Filament\Forms\Components\RichEditor;
 
 class RichMentionEditor extends RichEditor
@@ -33,7 +33,7 @@ class RichMentionEditor extends RichEditor
     protected ?int $menuItemLimit = null;
 
     /**
-     * @param array<string, mixed>|\Closure $mentionsItems
+     * @param  array<string, mixed>|\Closure  $mentionsItems
      * @return $this
      */
     public function mentionsItems(array|\Closure $mentionsItems): static
@@ -46,8 +46,8 @@ class RichMentionEditor extends RichEditor
     public function dehydrateState(array &$state, bool $isDehydrated = true): void
     {
         $rawState = $state['data'][$this->getName()];
-        if (!blank($this->getPluck())) {
-            $state['data']['mentions_' . $this->getName()] = $this->extractMentions($rawState);
+        if (! blank($this->getPluck())) {
+            $state['data']['mentions_'.$this->getName()] = $this->extractMentions($rawState);
         }
         $state['data'][$this->getName()] = $this->removeIdFromText($rawState);
     }

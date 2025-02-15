@@ -1,6 +1,6 @@
 <?php
 
-namespace Asmit\Mention\Contracts;
+namespace Asmit\FilamentMention\Contracts;
 
 interface Mentionable
 {

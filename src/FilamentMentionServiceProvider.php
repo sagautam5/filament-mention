@@ -1,6 +1,6 @@
 <?php
 
-namespace Asmit\Mention;
+namespace Asmit\FilamentMention;
 
 use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Assets\Css;
@@ -36,7 +36,7 @@ class FilamentMentionServiceProvider extends PackageServiceProvider
     {
         FilamentAsset::register([
             AlpineComponent::make(id: 'asmit-filament-mention', path: __DIR__.'/../dist/tributejs.js'),
-            Css::make(id: 'asmit-filament-mention', path: __DIR__ . '/../resources/css/asmit-filament-mention.css')->loadedOnRequest(),
+            Css::make(id: 'asmit-filament-mention', path: __DIR__.'/../resources/css/asmit-filament-mention.css')->loadedOnRequest(),
         ], package: 'asmit/filament-mention');
     }
 }
