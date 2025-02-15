@@ -50,8 +50,8 @@ return [
             'display_name' => 'name', // Display name for the mention
             'username' => 'username', // Username for the mention
             'avatar' => 'profile', // Avatar field (e.g. profile picture URL)
-            'url' => 'admin/users/{id}', // URL to the user's profile
         ],
+        'url' => 'admin/users/{id}', // this will be used to generate the url for the mention item
         'lookup_key' => 'username', // Used for static search (key in the dataset)
         'search_key' => 'username', // Used for dynamic search (database column)
     ],

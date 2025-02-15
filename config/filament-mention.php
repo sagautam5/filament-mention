@@ -8,8 +8,8 @@ return [
             'display_name' => 'name',
             'username' => 'username',
             'avatar' => 'profile',
-            'url' => 'admin/users/{id}',
         ],
+        'url' => 'admin/users/{id}', // this will be used to generate the url for the mention item
         'lookup_key' => 'username', // this will be used on static search
         'search_key' => 'username', // this will be used on dynamic search
     ],
