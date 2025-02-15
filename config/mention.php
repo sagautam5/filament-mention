@@ -1,10 +1,19 @@
 <?php
 
 return [
+    'mentionable' => [
+        'model' => \App\Models\User::class,
+        'column' => [
+            'id' => 'id',
+            'display_name' => 'name',
+            'username' => 'username',
+            'avatar' => 'profile',
+            'url' => 'admin/users/{id}',
+        ],
+        'lookup_key' => 'username', // this will be used on static search
+        'search_key' => 'username', // this will be used on dynamic search
+    ],
     'default' => [
-        'avatar' => 'image',
-        'display_name' => 'name',
-        'lookup_key' => 'username',
         'trigger_with' => '@',
         'menu_show_min_length' => 2,
         'menu_item_limit' => 10,

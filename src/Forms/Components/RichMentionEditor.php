@@ -2,9 +2,10 @@
 
 namespace Asmit\Mention\Forms\Components;
 
+use Asmit\Mention\Helpers\Helper;
 use Filament\Forms\Components\RichEditor;
 
-class RichMention extends RichEditor
+class RichMentionEditor extends RichEditor
 {
     protected string $view = 'asmit-mention::forms.components.rich-mention';
 
@@ -27,12 +28,12 @@ class RichMention extends RichEditor
 
     protected ?string $lookupKey = null;
 
-    protected ?string $displayName = null;
+    protected bool $displayName = true;
 
     protected ?int $menuItemLimit = null;
 
     /**
-     * @param  array<string, mixed>|\Closure  $mentionsItems
+     * @param array<string, mixed>|\Closure $mentionsItems
      * @return $this
      */
     public function mentionsItems(array|\Closure $mentionsItems): static
@@ -45,8 +46,8 @@ class RichMention extends RichEditor
     public function dehydrateState(array &$state, bool $isDehydrated = true): void
     {
         $rawState = $state['data'][$this->getName()];
-        if (! blank($this->getPluck())) {
-            $state['data']['mentions.'.$this->getName()] = $this->extractMentions($rawState);
+        if (!blank($this->getPluck())) {
+            $state['data']['mentions.' . $this->getName()] = $this->extractMentions($rawState);
         }
         $state['data'][$this->getName()] = $this->removeIdFromText($rawState);
     }
@@ -78,7 +79,18 @@ class RichMention extends RichEditor
         if ($this->mentionsItems instanceof \Closure) {
             return ($this->mentionsItems)($input);
         }
-
+        if (blank($this->mentionsItems)) {
+            $this->mentionsItems = (resolve(config('mention.mentionable.model')))
+                ->query()->get()->map(function ($item) {
+                    return [
+                        'id' => $id = $item->{config('mention.mentionable.column.id')},
+                        'name' => $item->{config('mention.mentionable.column.display_name')},
+                        'username' => $item->{config('mention.mentionable.column.username')},
+                        'avatar' => $item->{config('mention.mentionable.column.avatar')},
+                        'url' => Helper::getResolvedUrl($id),
+                    ];
+                })->toArray();
+        }
         return $this->mentionsItems;
     }
 
@@ -139,7 +151,7 @@ class RichMention extends RichEditor
 
     public function getLookupKey(): ?string
     {
-        return $this->lookupKey ?? config('mention.default.lookup_key');
+        return $this->lookupKey ?? config('mention.mentionable.lookup_key');
     }
 
     public function menuItemLimit(int $limit): self
@@ -152,17 +164,5 @@ class RichMention extends RichEditor
     public function getMenuItemLimit(): ?int
     {
         return $this->menuItemLimit ?? config('mention.default.menu_item_limit');
-    }
-
-    public function displayName(string $name): self
-    {
-        $this->displayName = $name;
-
-        return $this;
-    }
-
-    public function getDisplayName(): ?string
-    {
-        return $this->displayName ?? config('mention.default.display_name');
     }
 }

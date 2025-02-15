@@ -9,11 +9,9 @@
     mentionableItems: {{ json_encode($getMentionableItems()) }},
     triggerWith: '{{ $triggerWith() }}',
     pluck: '{{ $getPluck() }}',
-    avatar: '{{ $getAvatar() }}',
     menuShowMinLength: '{{ $getMenuShowMinLength() }}',
     menuItemLimit: '{{ $getMenuItemLimit() }}',
     lookupKey: '{{ $getLookupKey() }}',
-    displayName: '{{ $getDisplayName() }}',
     })"
     x-ingore
 >
