@@ -67,11 +67,16 @@ return [
 ### Key Configuration Options:
  - ``mentionable.model``: The Eloquent model to use for mentions (e.g. User).
  - ``mentionable.column``: Map the fields to use for mentions (e.g. id, name, etc.).
+ - ``mentionable.url``: URL pattern for the mention item (e.g. admin/users/{id}).
  - ``mentionable.lookup_key``: Used for static search (key in the dataset).
  - ``mentionable.search_key``: Used for dynamic search (database column).
  - ``default.trigger_with``: Character to trigger mentions (e.g. @).
  - ``default.menu_show_min_length``: Minimum characters to type before showing suggestions.
  - ``default.menu_item_limit``: Maximum number of suggestions to display.
+
+### Recommended:
+- **Use cache to store the mentionable data for static search.**
+- **Add indexes to the columns used for dynamic search.**
 
 ---
 ## Usage
@@ -133,8 +138,8 @@ For dynamic search you can you ``FetchMentionEditor`` field.
 
 > NOTE: The ``search_key`` must be the column name of your table.
 
-Before use the ``FetchMentionEditor`` field you need to implement the ``Mentionable`` interface in your livewire page (e.g. create and edit page). 
-And then ```use Asmit\FilamentMention\Traits\Mentionable;``` in your livewire page.
+Before use the ``FetchMentionEditor`` field you need to implement the ``Mentionable`` interface in your livewire page (e.g. create and edit page).\
+And then ```use Asmit\FilamentMention\Traits\Mentionable;``` in your livewire page.\
 It will add the method ``getMentionableItems(string $searhKey)`` in your livewire page. You can use this method to fetch the mentionable data.
 
 ```php
