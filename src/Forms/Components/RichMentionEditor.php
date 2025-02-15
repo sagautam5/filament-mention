@@ -91,6 +91,7 @@ class RichMentionEditor extends RichEditor
                     ];
                 })->toArray();
         }
+
         return $this->mentionItems;
     }
 

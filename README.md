@@ -6,7 +6,7 @@ The **Mention** plugin allows you to easily mention users in your Filament appli
 
 ## Features
 - **Mention users** in the Filament RichText editor.
-- **Extract specific fields** from the mentioned user (e.g., username, id).
+- **Extract specific fields** from the mentioned user (e.g. username, id).
 - **Static search**: Preload and search from a dataset.
 - **Dynamic search**: Fetch data from the database in real-time.
 - **Customizable user model and fields**: Use your own `User` model and define which fields to display.
@@ -26,7 +26,7 @@ The **Mention** plugin allows you to easily mention users in your Filament appli
 
 1. Install the package via Composer:
    ```bash
-   composer require asmit/mention
+   composer require asmit/filament-mention
     ```
 2. Publish the package assets:
    ```bash
@@ -34,7 +34,7 @@ The **Mention** plugin allows you to easily mention users in your Filament appli
    ```
 3. Publish the configuration file:
    ```bash
-   php artisan vendor:publish --provider="Asmit\Mention\MentionServiceProvider" --tag="asmit-mention-config"
+   php artisan vendor:publish --provider="Asmit\Mention\MentionServiceProvider" --tag="asmit-filament-mention-config"
    ```
 This will create a `mention.php` file in your `config` directory. You can customize the configuration according to your needs.
 
@@ -49,14 +49,14 @@ return [
             'id' => 'id', // Unique identifier for the user
             'display_name' => 'name', // Display name for the mention
             'username' => 'username', // Username for the mention
-            'avatar' => 'profile', // Avatar field (e.g., profile picture URL)
+            'avatar' => 'profile', // Avatar field (e.g. profile picture URL)
             'url' => 'admin/users/{id}', // URL to the user's profile
         ],
         'lookup_key' => 'username', // Used for static search (key in the dataset)
         'search_key' => 'username', // Used for dynamic search (database column)
     ],
     'default' => [
-        'trigger_with' => '@', // Character to trigger mentions (e.g., @)
+        'trigger_with' => '@', // Character to trigger mentions (e.g. @)
         'menu_show_min_length' => 2, // Minimum characters to type before showing suggestions
         'menu_item_limit' => 10, // Maximum number of suggestions to display
     ],
@@ -65,11 +65,11 @@ return [
 ---
 
 ### Key Configuration Options:
- - ``mentionable.model``: The Eloquent model to use for mentions (e.g., User).
- - ``mentionable.column``: Map the fields to use for mentions (e.g., id, name, etc.).
+ - ``mentionable.model``: The Eloquent model to use for mentions (e.g. User).
+ - ``mentionable.column``: Map the fields to use for mentions (e.g. id, name, etc.).
  - ``mentionable.lookup_key``: Used for static search (key in the dataset).
  - ``mentionable.search_key``: Used for dynamic search (database column).
- - ``default.trigger_with``: Character to trigger mentions (e.g., @).
+ - ``default.trigger_with``: Character to trigger mentions (e.g. @).
  - ``default.menu_show_min_length``: Minimum characters to type before showing suggestions.
  - ``default.menu_item_limit``: Maximum number of suggestions to display.
 
@@ -127,13 +127,14 @@ RichMentionEditor::make('bio')
 > NOTE: The data should be mapped like the above example.
 
 ### 2. Dynamic Search
-Dynamic search fetches mentionable data from the database in real-time. Use the FetchMentionEditor field for this purpose. 
+Dynamic search fetches mentionable data from the database in real-time. Use the ``FetchMentionEditor`` field for this purpose. 
 
 For dynamic search you can you ``FetchMentionEditor`` field.
 
 > NOTE: The ``search_key`` must be the column name of your table.
 
-Before use the ``FetchMentionEditor`` field you need to implement the ``Mentionable`` interface in your livewire page. And then ```use Asmit\Mention\Traits\Mentionable;``` in your livewire page.
+Before use the ``FetchMentionEditor`` field you need to implement the ``Mentionable`` interface in your livewire page (e.g. create and edit page). 
+And then ```use Asmit\Mention\Traits\Mentionable;``` in your livewire page.
 It will add the method ``getMentionableItems(string $searhKey)`` in your livewire page. You can use this method to fetch the mentionable data.
 
 ```php
@@ -144,6 +145,7 @@ FetchMentionEditor::make('Fetch')
 ```
 > You can override the method ``getMentionableItems`` in your livewire page to fetch the mentionable data.
 ___
+
 ## Pluck
 The plugin allows you to extract specific fields from the mentioned user. You can use the ``pluck`` method to extract the fields.
 This feature helps you to customize the mention output according to your needs.
