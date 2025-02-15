@@ -80,13 +80,13 @@ class RichMentionEditor extends RichEditor
             return ($this->mentionItems)($input);
         }
         if (blank($this->mentionItems)) {
-            $this->mentionItems = (resolve(config('mention.mentionable.model')))
+            $this->mentionItems = (resolve(config('filament-mention.mentionable.model')))
                 ->query()->get()->map(function ($item) {
                     return [
-                        'id' => $id = $item->{config('mention.mentionable.column.id')},
-                        'name' => $item->{config('mention.mentionable.column.display_name')},
-                        'username' => $item->{config('mention.mentionable.column.username')},
-                        'avatar' => $item->{config('mention.mentionable.column.avatar')},
+                        'id' => $id = $item->{config('filament-mention.mentionable.column.id')},
+                        'name' => $item->{config('filament-mention.mentionable.column.display_name')},
+                        'username' => $item->{config('filament-mention.mentionable.column.username')},
+                        'avatar' => $item->{config('filament-mention.mentionable.column.avatar')},
                         'url' => Helper::getResolvedUrl($id),
                     ];
                 })->toArray();
@@ -128,7 +128,7 @@ class RichMentionEditor extends RichEditor
      */
     public function getAvatar(): ?string
     {
-        return $this->evaluate($this->avatar) ?? config('mention.default.avatar');
+        return $this->evaluate($this->avatar) ?? config('filament-mention.default.avatar');
     }
 
     public function menuShowMinLength(int $length = 2): self
@@ -140,7 +140,7 @@ class RichMentionEditor extends RichEditor
 
     public function getMenuShowMinLength(): int
     {
-        return $this->menuShowMinLength ?? config('mention.default.menu_show_min_length');
+        return $this->menuShowMinLength ?? config('filament-mention.default.menu_show_min_length');
     }
 
     public function lookupKey(string $key): self
@@ -152,7 +152,7 @@ class RichMentionEditor extends RichEditor
 
     public function getLookupKey(): ?string
     {
-        return $this->lookupKey ?? config('mention.mentionable.lookup_key');
+        return $this->lookupKey ?? config('filament-mention.mentionable.lookup_key');
     }
 
     public function menuItemLimit(int $limit): self
@@ -164,6 +164,6 @@ class RichMentionEditor extends RichEditor
 
     public function getMenuItemLimit(): ?int
     {
-        return $this->menuItemLimit ?? config('mention.default.menu_item_limit');
+        return $this->menuItemLimit ?? config('filament-mention.default.menu_item_limit');
     }
 }

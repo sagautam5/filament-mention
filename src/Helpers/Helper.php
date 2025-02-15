@@ -6,11 +6,11 @@ final class Helper
 {
     public static function getResolvedUrl(string|int $key): string
     {
-        if (blank(config('mention.mentionable.model.url'))) {
+        if (blank(config('filament-mention.mentionable.model.url'))) {
             return '#';
         }
 
-        return url(str_replace('{id}', $key, config('mention-editor.mentionable.model.url')));
+        return url(str_replace('{id}', $key, config('filament-mention.mentionable.model.url')));
 
     }
 }
