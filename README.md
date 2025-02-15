@@ -34,7 +34,7 @@ The **Mention** plugin allows you to easily mention users in your Filament appli
    ```
 3. Publish the configuration file:
    ```bash
-   php artisan vendor:publish --provider="Asmit\Mention\FilamentMentionServiceProvider" --tag="asmit-filament-mention-config"
+   php artisan vendor:publish --provider="Asmit\FilamentMention\FilamentMentionServiceProvider" --tag="asmit-filament-mention-config"
    ```
 This will create a `filament-mention.php` file in your `config` directory. You can customize the configuration according to your needs.
 
@@ -134,11 +134,11 @@ For dynamic search you can you ``FetchMentionEditor`` field.
 > NOTE: The ``search_key`` must be the column name of your table.
 
 Before use the ``FetchMentionEditor`` field you need to implement the ``Mentionable`` interface in your livewire page (e.g. create and edit page). 
-And then ```use Asmit\Mention\Traits\Mentionable;``` in your livewire page.
+And then ```use Asmit\FilamentMention\Traits\Mentionable;``` in your livewire page.
 It will add the method ``getMentionableItems(string $searhKey)`` in your livewire page. You can use this method to fetch the mentionable data.
 
 ```php
-use Asmit\Mention\Forms\Components\FetchMentionEditor;
+use Asmit\FilamentMention\Forms\Components\FetchMentionEditor;
 
 FetchMentionEditor::make('Fetch')
     ->columnSpanFull(),
@@ -151,7 +151,7 @@ The plugin allows you to extract specific fields from the mentioned user. You ca
 This feature helps you to customize the mention output according to your needs.
 
 ```php
-use Asmit\Mention\Forms\Components\FetchMentionEditor;
+use Asmit\FilamentMention\Forms\Components\FetchMentionEditor;
 
 FetchMentionEditor::make('note')
             ->pluck('id')
@@ -160,9 +160,11 @@ The ``pluck`` method accepts the ``key`` name to extract the field from the ment
 
 It will add the new data attribute named ``mentions_[YOUR FIELD NAME]``. You can use this attribute to get the extracted field from the mentioned user.
 
+
 ## Credits
 - [Asmit Nepal][link-asmit]
 - [Kishan Sunar][link-kishan]
+- Jordan Humphreys (Creator of [TributeJs][link-tributejs])
 
 ### Security
 
@@ -179,3 +181,4 @@ The MIT License (MIT). Please see [License File](LICENSE.txt) for more informati
 
 [link-asmit]: https://github.com/AsmitNepali
 [link-kishan]: https://github.com/Ksunar
+[link-tributejs]:https://github.com/zurb/tribute
