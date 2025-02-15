@@ -2,6 +2,7 @@
 The **Mention** plugin allows you to easily mention users in your Filament application using the Filament RichText editor. It supports extracting specific fields from the mentioned user, such as their username, and id. The plugin offers both **static search** (preloaded data) and **dynamic search** (real-time database queries) for mentions.
 
 ---
+![Filament Mention Plugin](https://raw.githubusercontent.com/AsmitNepali/filament-mention/refs/heads/dev/images/cover.jpeg?token=GHSAT0AAAAAAC6PK4PRQUVCAOQNBHO4TH2QZ5QSKBA)
 
 ## Features
 - **Mention users** in the Filament RichText editor.
@@ -103,11 +104,11 @@ RichMentionEditor::make('bio')
 ```
 
 #### Key Points
- - The ``mentionsItems`` method should return an array of mentionable items.
+ - The ``mentionItems`` method should return an array of mentionable items.
  - Map the data to include ``id``, ``username``, ``name``, ``avatar``, and ``url``.
  - Use the ``lookup_key`` to search the mentionable item.
 
-You can change the lookup_key with chaining the method ``lookupKey`` in the ``RichMentionEditor`` field.
+You can change the ``lookup_key`` with chaining the method ``lookupKey`` in the ``RichMentionEditor`` field.
 ```php
 RichMentionEditor::make('bio')
   ->mentionsItems(function () {
@@ -130,7 +131,7 @@ Dynamic search fetches mentionable data from the database in real-time. Use the 
 
 For dynamic search you can you ``FetchMentionEditor`` field.
 
-> NOTE: The search_key must be the column name of your table.
+> NOTE: The ``search_key`` must be the column name of your table.
 
 Before use the ``FetchMentionEditor`` field you need to implement the ``Mentionable`` interface in your livewire page. And then ```use Asmit\Mention\Traits\Mentionable;``` in your livewire page.
 It will add the method ``getMentionableItems(string $searhKey)`` in your livewire page. You can use this method to fetch the mentionable data.
