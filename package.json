@@ -1,0 +1,24 @@
+{
+    "name": "mention",
+    "version": "1.0.0",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/AsmitNepali/filament-mention.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/AsmitNepali/filament-mention/issues"
+    },
+    "homepage": "https://github.com/AsmitNepali/filament-mention#readme",
+    "description": "",
+    "devDependencies": {
+        "esbuild": "^0.25.0",
+        "tributejs": "^5.1.3"
+    }
+}
