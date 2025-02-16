@@ -91,7 +91,7 @@ Static search preloads all mentionable data and searches within that dataset. Fo
 The ``RichMentionEditor`` fetch all the mentionable data first and then search the mention item from the fetched data.
 
 ```php
-use Asmit\Mention\Forms\Components\FetchMentionEditor;
+use Asmit\Mention\Forms\Components\RichMentionEditor;
 
 RichMentionEditor::make('bio')
     ->columnSpanFull(),
