@@ -33,7 +33,7 @@ The **Mention** plugin allows you to easily mention users in your Filament appli
    ```bash
    composer require asmit/filament-mention
     ```
-2. Publish the package assets:
+2. After installation and update please run the following command to publish the assets:
    ```bash
    php artisan filament:assets
    ```
@@ -82,6 +82,7 @@ return [
 ### Recommendations:
 - **Use cache to store the mentionable data for static search.**
 - **Add indexes to the columns used for dynamic search.**
+- **If you are use mention editor inside the modal, please disable grammarly extension by ``disableGrammarly()``.**
 
 ---
 ## Usage
@@ -170,6 +171,7 @@ The ``pluck`` method accepts the ``key`` name to extract the field from the ment
 
 It will add the new data attribute named ``mentions_[YOUR FIELD NAME]``. You can use this attribute to get the extracted field from the mentioned user.
 
+---
 
 ## Credits
 - [Asmit Nepal][link-asmit]
