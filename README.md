@@ -1,6 +1,11 @@
 # Filament Mention
 The **Mention** plugin allows you to easily mention users in your Filament application using the Filament RichText editor. It supports extracting specific fields from the mentioned user, such as their username, and id. The plugin offers both **static search** (preloaded data) and **dynamic search** (real-time database queries) for mentions.
 
+[![Latest Version on Packagist][ico-version]][link-packagist]
+[![Total Downloads][ico-downloads]][link-downloads]
+![Packagist License][ico-license]
+![GitHub forks][ico-forks]
+![GitHub Org's stars][ico-stars]
 ---
 ![Filament Mention Plugin](https://raw.githubusercontent.com/AsmitNepali/filament-mention/refs/heads/main/images/cover.jpg)
 
@@ -184,6 +189,17 @@ The MIT License (MIT). Please see [License File](LICENSE.txt) for more informati
 
 <i>Made with love by Asmit Nepali</i>
 
+
+[ico-version]: https://img.shields.io/packagist/v/asmit/filament-mention.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/asmit/filament-mention.svg?style=flat-square
+[ico-stable]: https://img.shields.io/packagist/s/asmit/filament-mention.svg?style=flat-square
+[ico-license]: https://img.shields.io/packagist/l/asmit/filament-mention.svg?style=flat-square
+[ico-forks]: https://img.shields.io/github/stars/asmitnepali/filament-mention?style=flat-square
+[ico-stars]: https://img.shields.io/github/stars/asmitnepali/filament-mention?style=flat-square
+
+
 [link-asmit]: https://github.com/AsmitNepali
 [link-kishan]: https://github.com/Ksunar
 [link-tributejs]:https://github.com/zurb/tribute
+[link-packagist]: https://packagist.org/packages/asmit/filament-mention
+[link-downloads]: https://packagist.org/packages/asmit/filament-mention
