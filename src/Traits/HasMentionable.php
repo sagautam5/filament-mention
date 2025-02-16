@@ -5,7 +5,7 @@ namespace Asmit\FilamentMention\Traits;
 use Asmit\FilamentMention\Helpers\Helper;
 
 /**
- * @phpstan-ignore-next-line 
+ * @phpstan-ignore-next-line
  */
 trait HasMentionable
 {
