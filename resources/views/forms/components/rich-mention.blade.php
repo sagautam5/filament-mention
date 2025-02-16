@@ -14,7 +14,6 @@
     menuItemLimit: '{{ $getMenuItemLimit() }}',
     lookupKey: '{{ $getLookupKey() }}',
     })"
-    x-ingore
 >
 @include('filament-forms::components.rich-editor')
 </div>
