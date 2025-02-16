@@ -46,13 +46,32 @@ class RichMentionEditor extends RichEditor
     public function dehydrateState(array &$state, bool $isDehydrated = true): void
     {
         $rawState = $state['data'][$this->getName()];
+
+        // Process mentions if pluck is provided
         if (! blank($this->getPluck())) {
-            $state['data']['mentions_'.$this->getName()] = $this->extractMentions($rawState);
+
+            $mentions = $this->extractMentions($rawState);
+
+            $this->updateLivewireData('mentions_'.$this->getName(), $mentions);
+
+            $state['data']['mentions_'.$this->getName()] = $mentions;
         }
-        $state['data'][$this->getName()] = $this->removeIdFromText($rawState);
+
+        // Remove IDs from the text and update the state
+        $cleanedText = $this->removeAppendedExtraTextFromState($rawState);
+        $this->updateLivewireData($this->getName(), $cleanedText);
+        $state['data'][$this->getName()] = $cleanedText;
     }
 
-    private function removeIdFromText(?string $text): ?string
+    /**
+     * Update Livewire data with the given key and value.
+     */
+    protected function updateLivewireData(string $key, mixed $value): void
+    {
+        $this->getLivewire()->data[$key] = $value; // @phpstan-ignore-line
+    }
+
+    private function removeAppendedExtraTextFromState(?string $text): ?string
     {
         return preg_replace($this->pattern, '', $text ?? '');
     }
