@@ -3,6 +3,7 @@
 namespace Asmit\FilamentMention\Forms\Components;
 
 use Asmit\FilamentMention\Helpers\Helper;
+use Closure;
 use Filament\Forms\Components\RichEditor;
 
 class RichMentionEditor extends RichEditor
@@ -46,13 +47,32 @@ class RichMentionEditor extends RichEditor
     public function dehydrateState(array &$state, bool $isDehydrated = true): void
     {
         $rawState = $state['data'][$this->getName()];
-        if (! blank($this->getPluck())) {
-            $state['data']['mentions_'.$this->getName()] = $this->extractMentions($rawState);
+
+        // Process mentions if pluck is provided
+        if (!blank($this->getPluck())) {
+
+            $mentions = $this->extractMentions($rawState);
+
+            $this->updateLivewireData('mentions_'.$this->getName(), $mentions);
+
+            $state['data']['mentions_'.$this->getName()] = $mentions;
         }
-        $state['data'][$this->getName()] = $this->removeIdFromText($rawState);
+
+        // Remove IDs from the text and update the state
+        $cleanedText = $this->removeAppendedExtraTextFromState($rawState);
+        $this->updateLivewireData($this->getName(), $cleanedText);
+        $state['data'][$this->getName()] = $cleanedText;
     }
 
-    private function removeIdFromText(?string $text): ?string
+    /**
+     * Update Livewire data with the given key and value.
+     */
+    protected function updateLivewireData(string $key, mixed $value): void
+    {
+        $this->getLivewire()->data[$key] = $value;
+    }
+
+    private function removeAppendedExtraTextFromState(?string $text): ?string
     {
         return preg_replace($this->pattern, '', $text ?? '');
     }
@@ -166,4 +186,6 @@ class RichMentionEditor extends RichEditor
     {
         return $this->menuItemLimit ?? config('filament-mention.default.menu_item_limit');
     }
+
+
 }
