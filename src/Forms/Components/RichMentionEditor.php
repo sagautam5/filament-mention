@@ -3,7 +3,6 @@
 namespace Asmit\FilamentMention\Forms\Components;
 
 use Asmit\FilamentMention\Helpers\Helper;
-use Closure;
 use Filament\Forms\Components\RichEditor;
 
 class RichMentionEditor extends RichEditor
@@ -49,7 +48,7 @@ class RichMentionEditor extends RichEditor
         $rawState = $state['data'][$this->getName()];
 
         // Process mentions if pluck is provided
-        if (!blank($this->getPluck())) {
+        if (! blank($this->getPluck())) {
 
             $mentions = $this->extractMentions($rawState);
 
@@ -69,7 +68,7 @@ class RichMentionEditor extends RichEditor
      */
     protected function updateLivewireData(string $key, mixed $value): void
     {
-        $this->getLivewire()->data[$key] = $value;
+        $this->getLivewire()->data[$key] = $value; // @phpstan-ignore-line
     }
 
     private function removeAppendedExtraTextFromState(?string $text): ?string
@@ -186,6 +185,4 @@ class RichMentionEditor extends RichEditor
     {
         return $this->menuItemLimit ?? config('filament-mention.default.menu_item_limit');
     }
-
-
 }
