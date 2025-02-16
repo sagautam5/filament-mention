@@ -194,7 +194,7 @@ The MIT License (MIT). Please see [License File](LICENSE.txt) for more informati
 [ico-downloads]: https://img.shields.io/packagist/dt/asmit/filament-mention.svg?style=flat-square
 [ico-stable]: https://img.shields.io/packagist/s/asmit/filament-mention.svg?style=flat-square
 [ico-license]: https://img.shields.io/packagist/l/asmit/filament-mention.svg?style=flat-square
-[ico-forks]: https://img.shields.io/github/stars/asmitnepali/filament-mention?style=flat-square
+[ico-forks]: https://img.shields.io/github/forks/asmitnepali/filament-mention?style=flat-square
 [ico-stars]: https://img.shields.io/github/stars/asmitnepali/filament-mention?style=flat-square
 
 
