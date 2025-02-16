@@ -13,6 +13,8 @@
     backdrop-filter: saturate(1.5) blur(20px);
     -webkit-backdrop-filter: saturate(1.5) blur(20px);
     transition: all .15s ease-in-out;
+    z-index: 40 !important;
+    position: absolute !important;
 }
     .tribute-container > ul {
     max-height: inherit;
