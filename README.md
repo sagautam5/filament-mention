@@ -1,14 +1,27 @@
 # Filament Mention
 The **Mention** plugin allows you to easily mention users in your Filament application using the Filament RichText editor. It supports extracting specific fields from the mentioned user, such as their username, and id. The plugin offers both **static search** (preloaded data) and **dynamic search** (real-time database queries) for mentions.
 
-[![Latest Version on Packagist][ico-version]][link-packagist]
-[![Total Downloads][ico-downloads]][link-downloads]
-![Packagist License][ico-license]
-![GitHub forks][ico-forks]
-![GitHub Org's stars][ico-stars]
----
 ![Filament Mention Plugin](https://raw.githubusercontent.com/AsmitNepali/filament-mention/refs/heads/main/images/cover.jpg)
+---
+<p class="flex items-center justify-center">
+    <a href="https://packagist.org/packages/asmit/filament-mention">
+        <img alt="Packagist" src="https://img.shields.io/packagist/v/asmit/filament-mention.svg?style=for-the-badge">
+    </a>
+    <a href="https://packagist.org/packages/asmit/filament-mention/stats">
+        <img alt="Packagist" src="https://img.shields.io/packagist/dt/asmit/filament-mention.svg?style=for-the-badge">
+    </a>
+    <a href="#">
+        <img alt="Packagist" src="https://img.shields.io/packagist/l/asmit/filament-mention.svg?style=for-the-badge">
+    </a>
+    <a href="https://packagist.org/packages/asmitnepali/filament-mention">
+        <img alt="Packagist" src="https://img.shields.io/github/stars/asmitnepali/filament-mention?style=for-the-badge">
+    </a>
+    <a href="https://github.com/AsmitNepali/filament-mention/forks">
+        <img alt="Packagist" src="https://img.shields.io/github/forks/asmitnepali/filament-mention?style=for-the-badge">
+    </a>
+</p>
 
+---
 ## Features
 - **Mention users** in the Filament RichText editor.
 - **Extract specific fields** from the mentioned user (e.g. username, id).
@@ -19,13 +32,8 @@ The **Mention** plugin allows you to easily mention users in your Filament appli
 - **Customizable suggestion limits**: Control the number of suggestions displayed and the minimum text length to trigger the search.
 - **Avatar and URL support**: Display user avatars and link to their profiles.
 
----
-
 ## Requirements
-- PHP 7.4 or higher
-- Laravel 8.0 or higher
 - Filament 3.2 or higher
-
 
 ## Installation
 
@@ -44,8 +52,10 @@ The **Mention** plugin allows you to easily mention users in your Filament appli
 This will create a `filament-mention.php` file in your `config` directory. You can customize the configuration according to your needs.
 
 ---
+
 ## Configuration
 The configuration file (``config/filament-mention.php``) allows you to customize the plugin behavior. Here’s an example configuration:
+
 ```php
 return [
     'mentionable' => [
@@ -156,7 +166,12 @@ FetchMentionEditor::make('Fetch')
 ```
 > You can override the method ``getMentionableItems`` in your livewire page to fetch the mentionable data.
 ___
-
+<a href="https://packagist.org/packages/asmitnepali/filament-mention">
+    <img alt="Packagist" src="https://img.shields.io/packagist/l/asmit/filament-mention.svg?style=for-the-badge">
+</a>
+<a href="https://github.com/AsmitNepali/filament-plugin-test/network/members">
+    <img alt="Forks" src="https://img.shields.io/github/forks/AsmitNepali/filament-plugin-test?style=for-the-badge">
+</a>
 ## Pluck
 The plugin allows you to extract specific fields from the mentioned user. You can use the ``pluck`` method to extract the fields.
 This feature helps you to customize the mention output according to your needs.

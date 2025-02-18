@@ -26,8 +26,7 @@ function createTribute({ fieldName, triggerWith, pluck, menuShowMinLength, menuI
         menuItemLimit: menuItemLimit,
         loadingItemTemplate: `<div class="loading-item">Loading...</div>`,
         lookup: lookupKey,
-        menuContainer: document.getElementById('add-list-'+fieldName),
-        positionMenu: false,
+        menuContainer: document.body,
         menuItemTemplate: (item) => generateMenuItemTemplate(item, lookupKey),
         selectTemplate: (item) => generateSelectTemplate(item, pluck, lookupKey),
         noMatchTemplate: () => `<span class="no-match">No results found</span>`
