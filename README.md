@@ -1,12 +1,6 @@
-# Filament Mention
+# @Mention
 The **Mention** plugin allows you to easily mention users in your Filament application using the Filament RichText editor. It supports extracting specific fields from the mentioned user, such as their username, and id. The plugin offers both **static search** (preloaded data) and **dynamic search** (real-time database queries) for mentions.
 
-[![Latest Version on Packagist][ico-version]][link-packagist]
-[![Total Downloads][ico-downloads]][link-downloads]
-![Packagist License][ico-license]
-![GitHub forks][ico-forks]
-![GitHub Org's stars][ico-stars]
----
 ![Filament Mention Plugin](https://raw.githubusercontent.com/AsmitNepali/filament-mention/refs/heads/main/images/cover.jpg)
 
 ## Features
@@ -20,10 +14,14 @@ The **Mention** plugin allows you to easily mention users in your Filament appli
 - **Avatar and URL support**: Display user avatars and link to their profiles.
 
 ---
+[![Latest Version on Packagist][ico-version]][link-packagist]
+[![Total Downloads][ico-downloads]][link-downloads]
+![Packagist License][ico-license]
+![GitHub forks][ico-forks]
+![GitHub Org's stars][ico-stars]
+---
 
 ## Requirements
-- PHP 7.4 or higher
-- Laravel 8.0 or higher
 - Filament 3.2 or higher
 
 
@@ -44,8 +42,10 @@ The **Mention** plugin allows you to easily mention users in your Filament appli
 This will create a `filament-mention.php` file in your `config` directory. You can customize the configuration according to your needs.
 
 ---
+
 ## Configuration
 The configuration file (``config/filament-mention.php``) allows you to customize the plugin behavior. Here’s an example configuration:
+
 ```php
 return [
     'mentionable' => [
