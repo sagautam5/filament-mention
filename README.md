@@ -166,12 +166,7 @@ FetchMentionEditor::make('Fetch')
 ```
 > You can override the method ``getMentionableItems`` in your livewire page to fetch the mentionable data.
 ___
-<a href="https://packagist.org/packages/asmitnepali/filament-mention">
-    <img alt="Packagist" src="https://img.shields.io/packagist/l/asmit/filament-mention.svg?style=for-the-badge">
-</a>
-<a href="https://github.com/AsmitNepali/filament-plugin-test/network/members">
-    <img alt="Forks" src="https://img.shields.io/github/forks/AsmitNepali/filament-plugin-test?style=for-the-badge">
-</a>
+
 ## Pluck
 The plugin allows you to extract specific fields from the mentioned user. You can use the ``pluck`` method to extract the fields.
 This feature helps you to customize the mention output according to your needs.
