@@ -32,6 +32,23 @@ class RichMentionEditor extends RichEditor
 
     protected ?int $menuItemLimit = null;
 
+    protected function setUp(): void
+    {
+        $this->afterStateUpdated(
+            function (string $state, callable $set, self $component) {
+                $mentions = $this->extractMentions($state);
+                $mentionKey = 'mentions_'.$this->getName();
+                $component->state([
+                    $this->removeAppendedExtraTextFromState($state),
+                    $mentionKey => $mentions,
+                ]);
+                // Update the form state with mentions
+
+            }
+        );
+
+    }
+
     /**
      * @param  array<string, mixed>|\Closure  $mentionsItems
      * @return $this
@@ -43,40 +60,9 @@ class RichMentionEditor extends RichEditor
         return $this;
     }
 
-    public function dehydrateState(array &$state, bool $isDehydrated = true): void
-    {
-        $key = array_key_first($state);
-
-        if ($key === 'data') {
-            $this->dehydrateData($state);
-
-            return;
-        }
-
-        $this->dehydrateMountedActionsData($state, $key);
-    }
-
     /**
-     * @param array<string, mixed> $state
-     * @return void
-     */
-    public function dehydrateData(array &$state): void
-    {
-        $fieldName = $this->getName();
-        $rawState = $state['data'][$fieldName];
-
-        if (! blank($this->getPluck())) {
-            $mentions = $this->extractMentions($rawState);
-            $this->updateStateWithMentions($state, $mentions);
-        }
-
-        $cleanedText = $this->removeAppendedExtraTextFromState($rawState);
-        $this->updateState($state, $cleanedText);
-    }
-
-    /**
-     * @param array<string, mixed> $state
-     * @param array<int|string, int|string> $mentions
+     * @param  array<string, mixed>  $state
+     * @param  array<int|string, int|string>  $mentions
      */
     private function updateStateWithMentions(array &$state, array $mentions): void
     {
@@ -86,36 +72,14 @@ class RichMentionEditor extends RichEditor
     }
 
     /**
-     * @param array<string, mixed> $state
-     * @return void
+     * @param  array<string, mixed>  $state
      */
-    private function updateState(array &$state, string|null $cleanedText): void
+    private function updateState(array &$state, ?string $cleanedText): void
     {
 
         $fieldName = $this->getName();
         $this->getLivewire()->data[$fieldName] = $cleanedText; // @phpstan-ignore-line
         $state['data'][$fieldName] = $cleanedText;
-    }
-
-    /**
-     * @param array<string, mixed> $state
-     */
-    public function dehydrateMountedActionsData(array &$state, string|null $keyOfMountActionData): void
-    {
-        if (is_null($keyOfMountActionData)) {
-            return;
-        }
-        $rawState = $state[$keyOfMountActionData][0][$this->getName()];
-        // Process mentions if pluck is provided
-        if (! blank($this->getPluck())) {
-            $mentions = $this->extractMentions($rawState);
-            $state[$keyOfMountActionData][0]['mentions_'.$this->getName()] = $mentions;
-        }
-
-        // Remove IDs from the text and update the state
-        $cleanedText = $this->removeAppendedExtraTextFromState($rawState);
-        $state[$keyOfMountActionData][0][$this->getName()] = $cleanedText;
-
     }
 
     private function removeAppendedExtraTextFromState(?string $text): ?string
