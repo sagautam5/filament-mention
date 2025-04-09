@@ -36,14 +36,18 @@ class RichMentionEditor extends RichEditor
     {
         $this->afterStateUpdated(
             function (string $state, callable $set, self $component) {
+
                 $mentions = $this->extractMentions($state);
                 $mentionKey = 'mentions_'.$this->getName();
-                $component->state([
-                    $this->removeAppendedExtraTextFromState($state),
-                    $mentionKey => $mentions,
-                ]);
-                // Update the form state with mentions
 
+                if ($this->getPluck()) {
+                    $component->state([
+                        'state' => $this->removeAppendedExtraTextFromState($state),
+                        $mentionKey => $mentions,
+                    ]);
+                } else {
+                    $component->state($this->removeAppendedExtraTextFromState($state));
+                }
             }
         );
 
