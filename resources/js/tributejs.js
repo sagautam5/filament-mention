@@ -32,16 +32,12 @@ function createTribute({
 
         const searchLower = searchText.toLowerCase();
 
-        console.log("Searching for:", searchLower);
-        console.log("Item:", item);
-
         // Search in all string properties of the object
         for (const key in item) {
             if (typeof item[key] === 'string') {
                 const valueToSearch = item[key].toLowerCase();
-                console.log(`Checking ${key}: ${valueToSearch}`);
+
                 if (valueToSearch.includes(searchLower)) {
-                    console.log(`Match found in ${key}`);
                     return true;
                 }
             }
@@ -108,7 +104,7 @@ function createTribute({
                 valuesFunction(text, function (items) {
                     // Filter items by searching across all properties
                     const filteredItems = items.filter(item => searchInObject(item, text));
-                    console.log("Filtered items:", filteredItems);
+
                     cb(filteredItems);
                 });
             },
@@ -212,7 +208,7 @@ function createTribute({
                 valuesFunction(text, function (items) {
                     // Filter items by searching across all properties
                     const filteredItems = items.filter(item => searchInObject(item, text));
-                    console.log("Filtered items for trigger " + trigger + ":", filteredItems);
+
                     cb(filteredItems);
                 });
             },
