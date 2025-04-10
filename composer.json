@@ -1,7 +1,6 @@
 {
   "name": "asmit/filament-mention",
   "description": "A Laravel Filament package for implementing a customizable mention editor with support for tagging users or entities.",
-  "version": "1.0.21",
   "type": "library",
   "license": "MIT",
   "autoload": {
