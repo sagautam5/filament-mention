@@ -5,7 +5,7 @@ function generateMenuItemTemplate(item, lookupKey) {
         <div class='mention-item'>
             ${item.original.avatar ? `<img class="mention-item__avatar" src="${item.original.avatar}" alt="${item.original[lookupKey]}"/>` : ''}
             <div class='mention-item__info'>
-                <div class='mention-item__info-name'>${item.original.name}</div>
+                <div class='mention-item__info-name'>${item.original.display_name}</div>
                 <div class='mention-item__info-email'>@${item.original[lookupKey]}</div>
             </div>
         </div>
@@ -32,7 +32,7 @@ function createTribute({ fieldName, triggerWith, pluck, menuShowMinLength, menuI
         noMatchTemplate: () => `<span class="no-match">No results found</span>`
     });
     tribute.attach(targetElement);
-
+    console.log('tribute');
     targetElement.addEventListener("tribute-active-true", () => tribute.menu.classList.add('tribute-active'));
     targetElement.addEventListener("tribute-active-false", () => tribute.menu.classList.remove('tribute-active'));
 
@@ -118,6 +118,7 @@ export function fetchMention({
                 menuItemLimit,
                 lookupKey,
                 valuesFunction: (text, cb) => {
+                    console.log(text)
                     alpine.getMentionableItems(text).then(items => {
                         cb(items);
                     });
