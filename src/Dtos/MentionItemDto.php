@@ -12,13 +12,15 @@ readonly class MentionItemDto implements Arrayable
         public string $displayName,
         public string $avatar,
         public string $url,
-    ) {}
+    ) {
+        //
+    }
 
     public function toArray(): array
     {
         return [
             'id' => $this->id,
-            'user_name' => $this->userName,
+            'username' => $this->userName,
             'display_name' => $this->displayName,
             'avatar' => $this->avatar,
             'url' => $this->url,
