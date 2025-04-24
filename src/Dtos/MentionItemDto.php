@@ -16,13 +16,21 @@ readonly class MentionItemDto implements Arrayable
         public string $avatar,
         public string $url,
     ) {
-        //
+        return $this->setMentionItem();
     }
 
     /**
      * @return array<string, mixed>
      */
     public function toArray(): array
+    {
+        return $this->setMentionItem();
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function setMentionItem(): array
     {
         return [
             'id' => $this->id,
