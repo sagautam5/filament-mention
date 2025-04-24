@@ -2,6 +2,7 @@
 
 namespace Asmit\FilamentMention\Forms\Components;
 
+use Asmit\FilamentMention\Dtos\MentionItemDto;
 use Asmit\FilamentMention\Helpers\Helper;
 use Filament\Forms\Components\RichEditor;
 
@@ -94,13 +95,13 @@ class RichMentionEditor extends RichEditor
         if (blank($this->mentionItems)) {
             $this->mentionItems = (resolve(config('filament-mention.mentionable.model')))
                 ->query()->get()->map(function ($item) {
-                    return [
-                        'id' => $id = $item->{config('filament-mention.mentionable.column.id')},
-                        'name' => $item->{config('filament-mention.mentionable.column.display_name')},
-                        'username' => $item->{config('filament-mention.mentionable.column.username')},
-                        'avatar' => $item->{config('filament-mention.mentionable.column.avatar')},
-                        'url' => Helper::getResolvedUrl($id),
-                    ];
+                    return (new MentionItemDto(
+                        id: $item->{config('filament-mention.mentionable.column.id')},
+                        username: $item->{config('filament-mention.mentionable.column.username')},
+                        displayName: $item->{config('filament-mention.mentionable.column.display_name')},
+                        avatar: $item->{config('filament-mention.mentionable.column.avatar')},
+                        url: Helper::getResolvedUrl($item->{config('filament-mention.mentionable.column.id')}),
+                    ))->toArray();
                 })->toArray();
         }
 
