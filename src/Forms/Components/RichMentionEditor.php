@@ -64,28 +64,6 @@ class RichMentionEditor extends RichEditor
         return $this;
     }
 
-    /**
-     * @param  array<string, mixed>  $state
-     * @param  array<int|string, int|string>  $mentions
-     */
-    private function updateStateWithMentions(array &$state, array $mentions): void
-    {
-        $mentionKey = 'mentions_'.$this->getName();
-        $this->getLivewire()->data[$mentionKey] = $mentions; // @phpstan-ignore-line
-        $state['data'][$mentionKey] = $mentions;
-    }
-
-    /**
-     * @param  array<string, mixed>  $state
-     */
-    private function updateState(array &$state, ?string $cleanedText): void
-    {
-
-        $fieldName = $this->getName();
-        $this->getLivewire()->data[$fieldName] = $cleanedText; // @phpstan-ignore-line
-        $state['data'][$fieldName] = $cleanedText;
-    }
-
     private function removeAppendedExtraTextFromState(?string $text): ?string
     {
         return preg_replace($this->pattern, '', $text ?? '');

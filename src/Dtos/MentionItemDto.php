@@ -4,6 +4,9 @@ namespace Asmit\FilamentMention\Dtos;
 
 use Illuminate\Contracts\Support\Arrayable;
 
+/**
+ * @implements Arrayable<string, mixed>
+ */
 readonly class MentionItemDto implements Arrayable
 {
     public function __construct(
@@ -16,6 +19,9 @@ readonly class MentionItemDto implements Arrayable
         //
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(): array
     {
         return [
