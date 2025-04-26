@@ -6,9 +6,9 @@ use Asmit\FilamentMention\Concerns\HasMentionableForm;
 use Asmit\FilamentMention\Helpers\Helper;
 
 /**
- * @phpstan-ignore-next-line
- *
  * @deprecated Use HasFormMentions instead.
+ *
+ * @phpstan-ignore-next-line
  */
 trait HasMentionable
 {

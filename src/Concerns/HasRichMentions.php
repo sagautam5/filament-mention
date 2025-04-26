@@ -34,7 +34,7 @@ trait HasRichMentions
 
     protected ?int $menuItemLimit = null;
 
-    public function getMentionableItemsUsing(?Closure $callback): static
+    public function getMentionableItemsUsing(Closure $callback): static
     {
         $this->getMentionableItemsUsing = $callback;
 
@@ -70,16 +70,14 @@ trait HasRichMentions
      */
     public function getMentionableItems(): array
     {
-        $mentionItems = $this->evaluate($this->mentionableItems);
-        if (is_null($mentionItems)) {
-            return [];
-        }
+        $this->mentionableItems = $this->evaluate($this->mentionableItems);
 
         if (blank($this->mentionableItems)) {
             $this->mentionableItems = $this->getMentionItemsUsingConfig();
         }
 
-        return collect($mentionItems)
+        /** @phpstan-ignore-next-line  */
+        return collect($this->mentionableItems)
             ->map(fn ($item) => $item instanceof MentionItem ? $item->toArray() : $item)
             ->toArray();
     }
@@ -156,6 +154,9 @@ trait HasRichMentions
         return $this->menuItemLimit ?? config('filament-mention.default.menu_item_limit');
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public function getSearchResults(string $search): array
     {
         if (! $this->getMentionableItemsUsing) {
@@ -173,6 +174,9 @@ trait HasRichMentions
         return $this->mentionableItems;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getMentionItemsUsingConfig(): array
     {
         return resolve(config('filament-mention.mentionable.model'))

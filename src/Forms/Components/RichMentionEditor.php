@@ -17,7 +17,7 @@ class RichMentionEditor extends RichEditor
             function (string $state, callable $set, self $component) {
 
                 $mentions = $this->extractMentions($state);
-                $mentionKey = 'mentions_'.$this->getName();
+                $mentionKey = 'mentioned_'.$this->getPluck();
 
                 if ($this->getPluck()) {
                     $component->state([
