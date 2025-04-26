@@ -5,7 +5,6 @@ namespace Asmit\FilamentMention\Forms\Components;
 use Asmit\FilamentMention\Dtos\MentionItem;
 use Asmit\FilamentMention\Helpers\Helper;
 use Closure;
-use Deprecated;
 use Filament\Forms\Components\RichEditor;
 use Illuminate\Contracts\Support\Arrayable;
 

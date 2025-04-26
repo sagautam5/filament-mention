@@ -1,6 +1,6 @@
 <?php
 
-namespace Asmit\FilamentMention\Traits;
+namespace Asmit\FilamentMention\Concerns;
 
 use Asmit\FilamentMention\Forms\Components\RichMentionEditor;
 use Livewire\Attributes\Renderless;
@@ -8,7 +8,7 @@ use Livewire\Attributes\Renderless;
 /**
  * @phpstan-ignore-next-line
  */
-trait HasMentionable
+trait HasMentionableForm
 {
     #[Renderless]
     public function getMentionsItems(string $search, string $statePath): array
