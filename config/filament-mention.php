@@ -14,8 +14,39 @@ return [
         'search_column' => 'username', // this will be used on dynamic search
     ],
     'default' => [
-        'trigger_with' => '@',
+        'trigger_with' => [
+            '@',
+            '#',
+            '%',
+        ],
+        'trigger_configs' => [
+            '@' => [
+                'lookupKey' => 'username',
+                'prefix' => '',
+                'suffix' => '',
+                'titleField' => 'name',
+                'hintField' => null,
+            ],
+            '#' => [
+                'lookupKey' => 'username',
+                'prefix' => '',
+                'suffix' => '',
+                'titleField' => 'name',
+                'hintField' => null,
+            ],
+            '%' => [
+                'lookupKey' => 'name',
+                'prefix' => '%',
+                'suffix' => '%',
+                'titleField' => 'name',
+                'hintField' => null,
+            ],
+        ],
         'menu_show_min_length' => 2,
         'menu_item_limit' => 10,
+        'prefix' => '',
+        'suffix' => '',
+        'title_field' => 'name',
+        'hint_field' => null,
     ],
 ];

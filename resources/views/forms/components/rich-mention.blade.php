@@ -9,11 +9,17 @@
     $menuItemLimit = $getMenuItemLimit();
     $lookupKey = $getLookupKey();
     $enableDynamicSearch = $getEnableDynamicSearch();
+    $triggerConfigs = $getTriggerConfigs();
+    $prefix = $getPrefix();
+    $suffix = $getSuffix();
+    $titleField = $getTitleField();
+    $hintField = $getHintField();
 @endphp
 
 <div id="add-list-{{ $getId() }}"
      wire:key="{{ $getId() }}"
-     wire:ignore x-ignore
+     wire:ignore
+     x-ignore
     @if (FilamentView::hasSpaMode(url()->current()))
         ax-load="visible"
     @else
@@ -29,6 +35,13 @@
         menuShowMinLength: @js($menuShowMinLength),
         menuItemLimit: @js($menuItemLimit),
         lookupKey: @js($lookupKey),
+        loadingItemString: '{{ trans('asmit-filament-mention::translations.loading') }}',
+        noResultsString: '{{ trans('asmit-filament-mention::translations.no_results') }}',
+        triggerConfigs: @js($triggerConfigs),
+        prefix: @js($prefix),
+        suffix: @js($suffix),
+        titleField: @js($titleField),
+        hintField: {{ $hintField ? "'".$hintField."'" : 'null' }},
         enableDynamicSearch: @js($enableDynamicSearch),
         getMentionResultUsing: async (search) => {
             return await $wire.getMentionsItems(search,@js($statePath))

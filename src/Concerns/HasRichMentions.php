@@ -16,23 +16,70 @@ trait HasRichMentions
 
     protected ?Closure $getMentionableItemsUsing = null;
 
-    protected string $modelClass;
+    /**
+     * @var string|array|null The trigger character(s) for mentions.
+     */
+    protected string|array|null $triggerWith = '@';
 
-    protected string $triggerWith = '@';
-
+    /**
+     * @var string|null|Closure The key to pluck from mentionable items.
+     */
     protected string|null|Closure $pluck = null;
 
+    /**
+     * @var string|null The avatar key for mentionable items.
+     */
     protected ?string $avatar = null;
 
-    private string $pattern = '/\(--([a-zA-Z0-9_\.]+)--\)/';
+    /**
+     * @var string The regex pattern for extracting mentions.
+     */
+    private const MENTION_PATTERN = '/\(--([a-zA-Z0-9_\.]+)--\)/';
 
+    /**
+     * @var int|null The minimum input length to show the mention menu.
+     */
     protected ?int $menuShowMinLength = null;
 
+    /**
+     * @var string|null The lookup key for mentionable items.
+     */
     protected ?string $lookupKey = null;
 
+    /**
+     * @var bool Whether to display the name of the mentionable item.
+     */
     protected bool $displayName = true;
 
+    /**
+     * @var int|null The maximum number of items to show in the mention menu.
+     */
     protected ?int $menuItemLimit = null;
+
+    /**
+     * @var array|null The configuration for specific triggers.
+     */
+    protected ?array $triggerConfigs = null;
+
+    /**
+     * @var string|null The prefix to add before the mention.
+     */
+    protected ?string $prefix = null;
+
+    /**
+     * @var string|null The suffix to add after the mention.
+     */
+    protected ?string $suffix = null;
+
+    /**
+     * @var string|null The field to use for the title in the mention dropdown.
+     */
+    protected ?string $titleField = null;
+
+    /**
+     * @var string|null The field to use for the hint in the mention dropdown.
+     */
+    protected ?string $hintField = null;
 
     public function getMentionableItemsUsing(Closure $callback): static
     {
@@ -194,5 +241,120 @@ trait HasRichMentions
     public function getEnableDynamicSearch(): bool
     {
         return ! is_null($this->getMentionableItemsUsing);
+    }
+
+    /**
+     * Set the configuration for specific triggers.
+     *
+     * @param  array  $configs  The configuration for specific triggers.
+     * @return $this
+     */
+    public function triggerConfigs(array $configs): static
+    {
+        $this->triggerConfigs = $configs;
+
+        return $this;
+    }
+
+    /**
+     * Get the configuration for specific triggers.
+     *
+     * @return array|null The configuration for specific triggers.
+     */
+    public function getTriggerConfigs(): ?array
+    {
+        return $this->triggerConfigs ?? config('filament-mention.default.trigger_configs', []);
+    }
+
+    /**
+     * Set the prefix to add before the mention.
+     *
+     * @param  string  $prefix  The prefix to add.
+     * @return $this
+     */
+    public function prefix(string $prefix): static
+    {
+        $this->prefix = $prefix;
+
+        return $this;
+    }
+
+    /**
+     * Get the prefix to add before the mention.
+     *
+     * @return string|null The prefix to add.
+     */
+    public function getPrefix(): ?string
+    {
+        return $this->prefix ?? config('filament-mention.default.prefix', '');
+    }
+
+    /**
+     * Set the suffix to add after the mention.
+     *
+     * @param  string  $suffix  The suffix to add.
+     * @return $this
+     */
+    public function suffix(string $suffix): static
+    {
+        $this->suffix = $suffix;
+
+        return $this;
+    }
+
+    /**
+     * Get the suffix to add after the mention.
+     *
+     * @return string|null The suffix to add.
+     */
+    public function getSuffix(): ?string
+    {
+        return $this->suffix ?? config('filament-mention.default.suffix', '');
+    }
+
+    /**
+     * Set the field to use for the title in the mention dropdown.
+     *
+     * @param  string  $field  The field to use for the title.
+     * @return $this
+     */
+    public function titleField(string $field): static
+    {
+        $this->titleField = $field;
+
+        return $this;
+    }
+
+    /**
+     * Get the field to use for the title in the mention dropdown.
+     *
+     * @return string|null The field to use for the title.
+     */
+    public function getTitleField(): ?string
+    {
+        return $this->titleField ?? config('filament-mention.default.title_field', 'name');
+    }
+
+    /**
+     * Set the field to use for the hint in the mention dropdown.
+     *
+     * @param  string  $field  The field to use for the hint.
+     * @return $this
+     */
+    public function hintField(string $field): static
+    {
+        $this->hintField = $field;
+
+        return $this;
+    }
+
+    /**
+     * Get the field to use for the hint in the mention dropdown.
+     *
+     * @return string|null The field to use for the hint.
+     */
+    public function getHintField(): ?string
+    {
+        return $this->hintField ?? config('filament-mention.default.hint_field');
     }
 }
