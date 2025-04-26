@@ -53,6 +53,24 @@ This will create a `filament-mention.php` file in your `config` directory. You c
 
 ---
 
+## Upgrading from 1.x to 2.x
+If you are upgrading from version 1.x to 2.x, please note these changes: 
+1. The configuration key `search_key` is now `search_column`.
+2. The `HasMentionable` trait is now `HasMentionableForm`.
+3. The `mentionsItems` method is now `mentionableItems`.
+4. The form data structure after pluck is change.
+   ```php
+    [
+        'note' => [
+            'state' => 'your comment message'
+            'mentioned_YOUR-PLUCK-KEY' => [
+                0 => 1,
+                1 => 2,
+                2 => 3,
+            ]
+    ]```
+5. The `FetchMentionEditor` is deprecated. You can use dynamic search with `getMentionableItemsUsing` method in the `RichMentionEditor` field.
+
 ## Configuration
 The configuration file (``config/filament-mention.php``) allows you to customize the plugin behavior. Here’s an example configuration:
 
@@ -83,7 +101,7 @@ return [
  - ``mentionable.column``: Map the fields to use for mentions (e.g. id, name, etc.).
  - ``mentionable.url``: URL pattern for the mention item (e.g. admin/users/{id}).
  - ``mentionable.lookup_key``: Used for static search (key in the dataset).
- - ``mentionable.search_key``: Used for dynamic search (database column).
+ - ``mentionable.search_column``: Used for dynamic search (database column).
  - ``default.trigger_with``: Character to trigger mentions (e.g. @).
  - ``default.menu_show_min_length``: Minimum characters to type before showing suggestions.
  - ``default.menu_item_limit``: Maximum number of suggestions to display.
@@ -106,17 +124,20 @@ use Asmit\Mention\Forms\Components\RichMentionEditor;
 RichMentionEditor::make('bio')
     ->columnSpanFull(),
 ```
-You can also change the data by pass the closure function ``mentionsItems`` in the ``RichMentionEditor`` field.
+You can also change the data by pass the closure function ``mentionableItems`` in the ``RichMentionEditor`` field.
 
 example:
 ```php
+use Asmit\FilamentMention\Forms\Components\RichMentionEditor;
+use Asmit\FilamentMention\Dtos\MentionItem;
+
 RichMentionEditor::make('comments')
     ->key(fn () => rand())
     ->disableGrammarly()
-    ->pluck('id')
-    ->mentionsItems(function () {
+    ->lookupKey('username')
+    ->mentionableItems(function () {
         return User::all()->map(function ($user) {
-            return (new MentionItemDto(
+            return (new MentionItem(
                 id: $user->id,
                 username: $user->username,
                 displayName: $user->name,
@@ -128,46 +149,50 @@ RichMentionEditor::make('comments')
 ```
 
 #### Key Points
- - The ``mentionItems`` method should return an array of mentionable items.
- - Map the data to include ``id``, ``username``, ``name``, ``avatar``, and ``url``.
+ - The ``mentionableItems`` method should return an array of mentionable items.
+ - The most convenient way to use the ``mentionableItems`` method is to use the ``MentionItem`` DTO.
  - Use the ``lookup_key`` to search the mentionable item.
-
 You can change the ``lookup_key`` with chaining the method ``lookupKey`` in the ``RichMentionEditor`` field.
-```php
-RichMentionEditor::make('bio')
-  ->mentionsItems(function () {
-      return User::all()->map(function ($user) {
-          return [
-                'id' => $user->id,
-                'username' => $user->username,
-                'name' => $user->name,
-                'avatar' => $user->profile,
-                'url' => 'admin/users/' . $user->id,
-          ];
-      })->toArray();
-  })
-    ->lookupKey('username')
-```
-> NOTE: The data should be mapped like the above example.
+
+> NOTE: If you not use ``mentionableItems`` then it will use the configuration from config file.
 
 ### 2. Dynamic Search
-Dynamic search fetches mentionable data from the database in real-time. Use the ``FetchMentionEditor`` field for this purpose. 
-
-For dynamic search you can you ``FetchMentionEditor`` field.
-
-> NOTE: The ``search_key`` must be the column name of your table.
-
-Before use the ``FetchMentionEditor`` field you need to implement the ``Mentionable`` interface in your livewire page (e.g. create and edit page).\
-And then ```use Asmit\FilamentMention\Traits\Mentionable;``` in your livewire page.\
-It will add the method ``getMentionableItems(string $searhKey)`` in your livewire page. You can use this method to fetch the mentionable data.
+To enable this feature you need to use the ``HasMentionableForm`` in to your livewire page.
 
 ```php
-use Asmit\FilamentMention\Forms\Components\FetchMentionEditor;
+use \Asmit\FilamentMention\Concerns\HasMentionableForm
 
-FetchMentionEditor::make('Fetch')
-    ->columnSpanFull(),
+class FilamentPage {
+    use HasMentionableForm;
+    // ...
+}
 ```
-> You can override the method ``getMentionableItems`` in your livewire page to fetch the mentionable data.
+
+Next, you can search the mentionable data from the database using the ``getMentionableItemsUsing`` method in the ``RichMentionEditor`` field.
+```php
+use Asmit\FilamentMention\Forms\Components\RichMentionEditor;
+use Asmit\FilamentMention\Dtos\MentionItem;
+
+RichMentionEditor::make('comments')
+    ->key(fn () => rand())
+    ->lookupKey('username')
+    ->disableGrammarly()
+    ->placeholder('Write your comment here...')
+    ->getMentionableItemsUsing(function ($query) {
+        return User::search($query)
+            ->get()
+            ->map(function ($user) {
+                return new MentionItem(
+                    id: $user->id,
+                    username: $user->username,
+                    displayName: $user->name,
+                    avatar: $user->profile,
+                    url: '#');
+            })->toArray();
+    })
+
+```
+
 ___
 
 ## Pluck
@@ -175,14 +200,39 @@ The plugin allows you to extract specific fields from the mentioned user. You ca
 This feature helps you to customize the mention output according to your needs.
 
 ```php
-use Asmit\FilamentMention\Forms\Components\FetchMentionEditor;
+use \Asmit\FilamentMention\Forms\Components\RichMentionEditor;
 
-FetchMentionEditor::make('note')
-            ->pluck('id')
+RichMentionEditor::make('note')
+    ->pluck('id')
+    ->getMentionableItemsUsing(function ($query) {
+        return User::search($query)
+                ->get()
+                ->map(function ($user) {
+                    return new MentionItem(
+                        id: $user->id,
+                        username: $user->username,
+                        displayName: $user->name,
+                        avatar: $user->profile,
+                        url: '#');
+                })->toArray();
+        })
 ```
-The ``pluck`` method accepts the ``key`` name to extract the field from the mentioned user.
+The ``pluck`` method accepts the ``key`` to extract the field from the mentioned user. The key should be ``id`` or ``username``.
+It extracts the data from the MentionItem and return the data in the array format.
 
-It will add the new data attribute named ``mentions_[YOUR FIELD NAME]``. You can use this attribute to get the extracted field from the mentioned user.
+It will add the new data attribute named ``mentioned_[YOUR PLUCK LEY]``.
+If you inspect the data it will return like
+```php
+    [
+        'note' => [
+            'state' => 'your comment message'
+            'mentioned_id' => [
+                0 => 1,
+                1 => 2,
+                2 => 3,
+            ]
+    ]
+```
 
 ---
 
