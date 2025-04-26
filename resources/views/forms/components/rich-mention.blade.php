@@ -1,20 +1,38 @@
 @use('Filament\Support\Facades\FilamentAsset')
-<div
-    id="add-list-{{ $getId() }}"
-    wire:key="{{ rand() }}"
-    ax-load
-    ax-load-src="{{ FilamentAsset::getAlpineComponentSrc(id:'asmit-filament-mention', package: 'asmit/filament-mention') }}"
-    x-load-css="[@js(FilamentAsset::getStyleHref(id:'asmit-filament-mention', package: 'asmit/filament-mention'))]"
-    x-ignore
-    x-data="mention({
-    fieldName: '{{ $getId() }}',
-    mentionableItems: {{ json_encode($getMentionableItems()) }},
-    triggerWith: '{{ $triggerWith() }}',
-    pluck: '{{ $getPluck() }}',
-    menuShowMinLength: '{{ $getMenuShowMinLength() }}',
-    menuItemLimit: '{{ $getMenuItemLimit() }}',
-    lookupKey: '{{ $getLookupKey() }}',
-    })"
->
-@include('filament-forms::components.rich-editor')
+@use('Filament\Support\Facades\FilamentView')
+@php
+    $statePath = $getStatePath();
+    $staticMentionableItems = $getMentionableItems();
+    $triggerWith = $triggerWith();
+    $pluck = $getPluck();
+    $menuShowMinLength = $getMenuShowMinLength();
+    $menuItemLimit = $getMenuItemLimit();
+    $lookupKey = $getLookupKey();
+    $enableDynamicSearch = $getEnableDynamicSearch();
+@endphp
+
+<div id="add-list-{{ $getId() }}"
+     wire:key="{{ $getId() }}"
+     wire:ignore x-ignore
+    @if (FilamentView::hasSpaMode(url()->current()))
+        ax-load="visible"
+    @else
+            ax-load
+     @endif
+    ax-load-src="{{ FilamentAsset::getAlpineComponentSrc(id: 'asmit-filament-mention', package: 'asmit/filament-mention') }}"
+    x-load-css="[@js(FilamentAsset::getStyleHref(id: 'asmit-filament-mention', package: 'asmit/filament-mention'))]"
+     x-data="mention({
+        statePath: '{{ $statePath }}',
+        mentionableItems: @js($staticMentionableItems),
+        triggerWith: @js($triggerWith),
+        pluck: @js($pluck),
+        menuShowMinLength: @js($menuShowMinLength),
+        menuItemLimit: @js($menuItemLimit),
+        lookupKey: @js($lookupKey),
+        enableDynamicSearch: @js($enableDynamicSearch),
+        getMentionResultUsing: async (search) => {
+            return await $wire.getMentionsItems(search,@js($statePath))
+        },
+    })">
+    @include('filament-forms::components.rich-editor')
 </div>

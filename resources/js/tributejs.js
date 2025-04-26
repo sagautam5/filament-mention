@@ -17,8 +17,8 @@ function generateSelectTemplate(item, pluck, lookupKey) {
     return `<a href="${item.original.url}(--${item.original[pluck]}--)" data-trix-attribute="bold">@${item.original[lookupKey]}</a>`;
 }
 
-function createTribute({ fieldName, triggerWith, pluck, menuShowMinLength, menuItemLimit, lookupKey, valuesFunction }) {
-    const targetElement = document.getElementById(fieldName);
+function createTribute({ statePath: statePath, triggerWith, pluck, menuShowMinLength, menuItemLimit, lookupKey, valuesFunction }) {
+    const targetElement = document.getElementById(statePath);
     const tribute = new Tribute({
         trigger: triggerWith,
         values: valuesFunction,
@@ -60,33 +60,45 @@ function createTribute({ fieldName, triggerWith, pluck, menuShowMinLength, menuI
 }
 
 export function mention({
-                            fieldName,
-                            mentionableItems,
-                            triggerWith,
-                            pluck,
-                            menuShowMinLength,
-                            menuItemLimit,
-                            lookupKey,
-                        }) {
+    statePath,
+    mentionableItems,
+    triggerWith,
+    pluck,
+    menuShowMinLength,
+    menuItemLimit,
+    lookupKey,
+    enableDynamicSearch,
+    getMentionResultUsing
+}) {
     return {
-        fieldName,
+        statePath,
         pluck,
         menuShowMinLength,
         lookupKey,
         menuItemLimit,
+        getMentionResultUsing,
         init() {
             createTribute({
-                fieldName: this.fieldName,
+                statePath: this.statePath,
                 triggerWith,
                 pluck,
                 menuShowMinLength,
                 lookupKey,
                 menuItemLimit,
                 valuesFunction: (text, cb) => {
-                  const items = mentionableItems.filter(user =>
-                        user[lookupKey].toLowerCase().includes(text.toLowerCase())
-                    );
-                    cb(items);
+                    if (enableDynamicSearch) {
+                        this.getMentionResultUsing(text,this.statePath).then((response) => {
+                            const items = response.filter(user =>
+                                user[lookupKey].toLowerCase().includes(text.toLowerCase())
+                            );
+                            cb(items);
+                        });
+                    } else {
+                        const items = mentionableItems.filter(user =>
+                            user[lookupKey].toLowerCase().includes(text.toLowerCase())
+                        );
+                        cb(items);
+                    }
                 }
             });
         }
@@ -94,30 +106,37 @@ export function mention({
 }
 
 export function fetchMention({
-                                 fieldName,
-                                 triggerWith,
-                                 pluck,
-                                 menuShowMinLength,
-                                 menuItemLimit,
-                                 lookupKey,
-                             }) {
+    statePath,
+    triggerWith,
+    pluck,
+    menuShowMinLength,
+    menuItemLimit,
+    lookupKey,
+    getMentionResultUsing
+
+}) {
     return {
-        fieldName,
+        statePath,
         pluck,
         menuShowMinLength,
         menuItemLimit,
         lookupKey,
+        getMentionResultUsing,
         init() {
+
             const alpine = this.$wire;
             createTribute({
-                fieldName: this.fieldName,
+                statePath: this.statePath,
                 triggerWith,
                 pluck,
                 menuShowMinLength,
                 menuItemLimit,
                 lookupKey,
-                valuesFunction: (text, cb) => {
-                    alpine.getMentionableItems(text).then(items => {
+                valuesFunction: async (text, cb) => {
+                    await this.getMentionResultUsing(text, 'data.bio').then((response) => {
+                        const items = response.filter(user =>
+                            user[lookupKey].toLowerCase().includes(text.toLowerCase())
+                        );
                         cb(items);
                     });
                 }

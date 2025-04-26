@@ -68,8 +68,7 @@ return [
         ],
         'url' => 'admin/users/{id}', // this will be used to generate the url for the mention item
         'lookup_key' => 'username', // Used for static search (key in the dataset)
-        'search_key' => 'username', // Used for dynamic search (database column)
-    ],
+        'search_column' => 'username', // this will be used on dynamic search 
     'default' => [
         'trigger_with' => '@', // Character to trigger mentions (e.g. @)
         'menu_show_min_length' => 2, // Minimum characters to type before showing suggestions
@@ -111,17 +110,21 @@ You can also change the data by pass the closure function ``mentionsItems`` in t
 
 example:
 ```php
-RichMentionEditor::make('bio')
-  ->mentionsItems(function () {
-      return User::all()->map(function ($user) {
-          return [
-              'username' => $user->username,
-              'name' => $user->name,
-              'avatar' => $user->profile,
-              'url' => 'admin/users/' . $user->id,
-          ];
-      })->toArray();
-  })
+RichMentionEditor::make('comments')
+    ->key(fn () => rand())
+    ->disableGrammarly()
+    ->pluck('id')
+    ->mentionsItems(function () {
+        return User::all()->map(function ($user) {
+            return (new MentionItemDto(
+                id: $user->id,
+                username: $user->username,
+                displayName: $user->name,
+                avatar: $user->profile,
+                url: '/users/admin'.$user->id,
+            ));
+        })->toArray();
+    }),
 ```
 
 #### Key Points

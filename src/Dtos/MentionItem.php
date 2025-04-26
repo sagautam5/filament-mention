@@ -7,7 +7,7 @@ use Illuminate\Contracts\Support\Arrayable;
 /**
  * @implements Arrayable<string, mixed>
  */
-readonly class MentionItemDto implements Arrayable
+readonly class MentionItem implements Arrayable
 {
     public function __construct(
         public int $id,
@@ -16,7 +16,7 @@ readonly class MentionItemDto implements Arrayable
         public string $avatar,
         public string $url,
     ) {
-        return $this->setMentionItem();
+        //
     }
 
     /**
