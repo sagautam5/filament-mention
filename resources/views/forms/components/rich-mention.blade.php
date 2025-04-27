@@ -12,8 +12,9 @@
     $triggerConfigs = $getTriggerConfigs();
     $prefix = $getPrefix();
     $suffix = $getSuffix();
-    $titleField = $getTitleField();
-    $hintField = $getHintField();
+    $label = $getLabelKey();
+    $hint = $getHintKey();
+//    dd($staticMentionableItems);
 @endphp
 
 <div id="add-list-{{ $getId() }}"
@@ -40,8 +41,8 @@
         triggerConfigs: @js($triggerConfigs),
         prefix: @js($prefix),
         suffix: @js($suffix),
-        titleField: @js($titleField),
-        hintField: {{ $hintField ? "'".$hintField."'" : 'null' }},
+        labelKey: @js($label),
+        hintKey: {{ $hint ? "'".$hint."'" : 'null' }},
         enableDynamicSearch: @js($enableDynamicSearch),
         getMentionResultUsing: async (search) => {
             return await $wire.getMentionsItems(search,@js($statePath))

@@ -59,7 +59,7 @@
     flex-direction: column;
 }
 
-.mention-item__info-title {
+.mention-item__info-label {
     font-size: 0.75rem;
     font-weight: 600;
     line-height: calc(1 / 0.75);
@@ -85,7 +85,7 @@
 }
 
 .highlight .mention-item__info-hint,
-.highlight .mention-item__info-title {
+.highlight .mention-item__info-label {
     color: rgb(0, 0, 0)
 }
 
@@ -112,6 +112,6 @@
 }
 
 .dark .highlight .mention-item__info-hint,
-.dark .highlight .mention-item__info-title {
+.dark .highlight .mention-item__info-label {
     color: rgb(255, 255, 255)
 }

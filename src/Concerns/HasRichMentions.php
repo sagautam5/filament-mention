@@ -3,6 +3,7 @@
 namespace Asmit\FilamentMention\Concerns;
 
 use Asmit\FilamentMention\Dtos\MentionItem;
+use Asmit\FilamentMention\Dtos\TriggerConfig;
 use Asmit\FilamentMention\Helpers\Helper;
 use Closure;
 use Illuminate\Contracts\Support\Arrayable;
@@ -74,12 +75,12 @@ trait HasRichMentions
     /**
      * @var string|null The field to use for the title in the mention dropdown.
      */
-    protected ?string $titleField = null;
+    protected ?string $labelKey = null;
 
     /**
      * @var string|null The field to use for the hint in the mention dropdown.
      */
-    protected ?string $hintField = null;
+    protected ?string $hintKey = null;
 
     public function getMentionableItemsUsing(Closure $callback): static
     {
@@ -186,7 +187,7 @@ trait HasRichMentions
 
     public function getLookupKey(): ?string
     {
-        return $this->lookupKey ?? config('filament-mention.mentionable.lookup_key');
+        return $this->lookupKey ?? config('filament-mention.default.lookup_key');
     }
 
     public function menuItemLimit(int $limit): self
@@ -230,8 +231,8 @@ trait HasRichMentions
             ->query()->get()->map(function ($item) {
                 return (new MentionItem(
                     id: $item->{config('filament-mention.mentionable.column.id')},
-                    username: $item->{config('filament-mention.mentionable.column.username')},
-                    displayName: $item->{config('filament-mention.mentionable.column.display_name')},
+                    label: $item->{config('filament-mention.mentionable.column.label')},
+                    value: $item->{config('filament-mention.mentionable.column.value')},
                     avatar: $item->{config('filament-mention.mentionable.column.avatar')},
                     url: Helper::getResolvedUrl($item->{config('filament-mention.mentionable.column.id')}),
                 ))->toArray();
@@ -246,14 +247,15 @@ trait HasRichMentions
     /**
      * Set the configuration for specific triggers.
      *
-     * @param  array  $configs  The configuration for specific triggers.
+     * @param  array|Closure  $configs  The configuration for specific triggers.
      * @return $this
      */
-    public function triggerConfigs(array $configs): static
+    public function triggerConfigs(array|Closure $configs): static
     {
-        $this->triggerConfigs = $configs;
+        $this->triggerConfigs = $this->evaluate($configs);
 
         return $this;
+
     }
 
     /**
@@ -263,7 +265,25 @@ trait HasRichMentions
      */
     public function getTriggerConfigs(): ?array
     {
-        return $this->triggerConfigs ?? config('filament-mention.default.trigger_configs', []);
+        $configs = $this->evaluate($this->triggerConfigs);
+        if (is_null($configs)) {
+            return config('filament-mention.default.trigger_configs') ?? [];
+        }
+
+        return collect($configs)
+            ->mapWithKeys(fn ($config) => $config instanceof TriggerConfig
+                ? [
+                    $config->triggerChar => [
+                        'lookupKey' => $config->lookupKey,
+                        'prefix' => $config->prefix,
+                        'suffix' => $config->suffix,
+                        'labelKey' => $config->labelKey,
+                        'hintKey' => $config->hintKey,
+                    ],
+                ]
+                : throw new \Exception('Invalid trigger config, please use TriggerConfig DTO')
+            )
+            ->toArray();
     }
 
     /**
@@ -318,9 +338,9 @@ trait HasRichMentions
      * @param  string  $field  The field to use for the title.
      * @return $this
      */
-    public function titleField(string $field): static
+    public function labelKey(string $field): static
     {
-        $this->titleField = $field;
+        $this->labelKey = $field;
 
         return $this;
     }
@@ -330,9 +350,9 @@ trait HasRichMentions
      *
      * @return string|null The field to use for the title.
      */
-    public function getTitleField(): ?string
+    public function getLabelKey(): ?string
     {
-        return $this->titleField ?? config('filament-mention.default.title_field', 'name');
+        return $this->labelKey ?? config('filament-mention.default.label_key', 'name');
     }
 
     /**
@@ -341,9 +361,9 @@ trait HasRichMentions
      * @param  string  $field  The field to use for the hint.
      * @return $this
      */
-    public function hintField(string $field): static
+    public function hintKey(string $field): static
     {
-        $this->hintField = $field;
+        $this->hintKey = $field;
 
         return $this;
     }
@@ -353,8 +373,8 @@ trait HasRichMentions
      *
      * @return string|null The field to use for the hint.
      */
-    public function getHintField(): ?string
+    public function getHintKey(): ?string
     {
-        return $this->hintField ?? config('filament-mention.default.hint_field');
+        return $this->hintKey ?? config('filament-mention.default.hint_key');
     }
 }
