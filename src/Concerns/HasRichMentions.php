@@ -19,7 +19,7 @@ trait HasRichMentions
     /**
      * @var string|array|null The trigger character(s) for mentions.
      */
-    protected string|array|null $triggerWith = '@';
+    protected string|array|null $triggerWith = [];
 
     /**
      * @var string|null|Closure The key to pluck from mentionable items.
@@ -129,9 +129,9 @@ trait HasRichMentions
             ->toArray();
     }
 
-    public function triggerWith(): string
+    public function triggerWith(): array|string
     {
-        return $this->triggerWith;
+        return $this->triggerWith ?: config('filament-mention.default.trigger_with');
     }
 
     /**

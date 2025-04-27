@@ -22,7 +22,7 @@ return [
         'trigger_configs' => [
             '@' => [
                 'lookupKey' => 'username',
-                'prefix' => '',
+                'prefix' => '@',
                 'suffix' => '',
                 'titleField' => 'name',
                 'hintField' => null,

@@ -15,10 +15,7 @@ function createTribute({
     suffix = '',
     titleField = 'title',
     hintField = null,
-    enableDynamicSearch,
-    getMentionResultUsing
 }) {
-    console.log(statePath);
 
     const targetElement = document.getElementById(statePath);
 
@@ -94,6 +91,7 @@ function createTribute({
         }
 
         const displayValue = getDisplayValue(item, lookupKey);
+        console.log(`${currentPrefix}${displayValue}${currentSuffix}`);
         return `${currentPrefix}${displayValue}${currentSuffix}`;
     }
 
@@ -120,6 +118,7 @@ function createTribute({
             },
             menuContainer: document.body,
             menuItemTemplate: function (item) {
+
                 const title = getTitleValue(item.original, titleField);
                 const hint = getHintValue(item.original, hintField, currentPrefix, currentSuffix, lookupKey);
 
@@ -340,60 +339,19 @@ export function mention({
                 enableDynamicSearch,
                 getMentionResultUsing,
                 valuesFunction: function (text, cb) {
-                    cb(mentionableItems);
-                }
-            });
-        }
-    };
-}
-
-export function fetchMention({
-    statePath,
-    triggerWith,
-    pluck,
-    menuShowMinLength,
-    menuItemLimit,
-    lookupKey,
-    loadingItemString,
-    noResultsString,
-    triggerConfigs = null,
-    prefix = '',
-    suffix = '',
-    titleField = 'title',
-    hintField = null,
-    enableDynamicSearch,
-    getMentionResultUsing
-}) {
-    return {
-        statePath,
-        pluck,
-        menuShowMinLength,
-        menuItemLimit,
-        lookupKey,
-        enableDynamicSearch,
-        getMentionResultUsing,
-        init() {
-            const alpine = this.$wire;
-            createTribute({
-                statePath: this.statePath,
-                triggerWith,
-                pluck,
-                menuShowMinLength,
-                lookupKey,
-                menuItemLimit,
-                loadingItemString,
-                noResultsString,
-                triggerConfigs,
-                prefix,
-                suffix,
-                titleField,
-                hintField,
-                enableDynamicSearch,
-                getMentionResultUsing,
-                valuesFunction: function (text, cb) {
-                    alpine.getMentionableItems(text).then(function (items) {
+                    if (enableDynamicSearch) {
+                        this.getMentionResultUsing(text,this.statePath).then((response) => {
+                            const items = response.filter(user =>
+                                user[lookupKey].toLowerCase().includes(text.toLowerCase())
+                            );
+                            cb(items);
+                        });
+                    } else {
+                        const items = mentionableItems.filter(user =>
+                            user[lookupKey].toLowerCase().includes(text.toLowerCase())
+                        );
                         cb(items);
-                    });
+                    }
                 }
             });
         }
