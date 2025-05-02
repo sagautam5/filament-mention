@@ -20,9 +20,9 @@ return [
         'trigger_configs' => [
             '#' => [
                 'lookupKey' => 'value',
-                'prefix' => '',
-                'suffix' => '',
-                'labelKey' => 'id',
+                'prefix' => '[',
+                'suffix' => ']',
+                'labelKey' => 'label',
                 'hintKey' => null,
             ],
             '%' => [

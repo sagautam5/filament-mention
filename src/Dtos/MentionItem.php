@@ -13,8 +13,8 @@ readonly class MentionItem implements Arrayable
         public int $id,
         public string $label,
         public string $value,
-        public string $avatar,
-        public string $url,
+        public ?string $avatar,
+        public ?string $url,
     ) {
         //
     }

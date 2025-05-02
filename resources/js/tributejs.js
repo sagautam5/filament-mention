@@ -226,6 +226,10 @@ function setupEventListeners(targetElement, tribute) {
     });
 }
 
+export function editor()  {
+    console.log('Nice to meet you!');
+}
+
 export function mention({
     statePath,
     mentionableItems,
