@@ -1,4 +1,7 @@
 @use('Filament\Support\Facades\FilamentAsset')
+@php
+    $statePath = $getStatePath();
+@endphp
 <div
         id="add-list-{{ $getId() }}"
         ax-load
@@ -18,8 +21,12 @@
     prefix: '{{ $getPrefix() }}',
     suffix: '{{ $getSuffix() }}',
     titleField: '{{ $getTitleField() }}',
-    hintField: {{ $getHintField() ? "'".$getHintField()."'" : 'null' }}
+    hintField: {{ $getHintField() ? "'".$getHintField()."'" : 'null' }},
+    enableDynamicSearch: true,
+    getMentionResultUsing: async (search) => {
+            return await $wire.getMentionsItems(search,@js($statePath))
+        },
     })"
 >
-    @include('filament-forms::components.rich-editor')
+@include('filament-forms::components.rich-editor')
 </div>

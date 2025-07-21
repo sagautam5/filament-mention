@@ -2,13 +2,18 @@
 
 namespace Asmit\FilamentMention\Traits;
 
+use Asmit\FilamentMention\Concerns\HasMentionableForm;
 use Asmit\FilamentMention\Helpers\Helper;
 
 /**
+ * @deprecated Use HasFormMentions instead.
+ *
  * @phpstan-ignore-next-line
  */
 trait HasMentionable
 {
+    use HasMentionableForm;
+
     public function getMentionableItems(?string $searchKey): array
     {
         return resolve(config('filament-mention.mentionable.model'))

@@ -26,8 +26,8 @@ class FilamentMentionServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         FilamentAsset::register([
-            AlpineComponent::make(id: 'asmit-filament-mention', path: __DIR__ . '/../resources/dist/js/tributejs.js'),
-            Css::make(id: 'asmit-filament-mention', path: __DIR__ . '/../resources/css/asmit-filament-mention.css')
+            AlpineComponent::make(id: 'asmit-filament-mention', path: __DIR__.'/../resources/dist/js/tributejs.js'),
+            Css::make(id: 'asmit-filament-mention', path: __DIR__.'/../resources/css/asmit-filament-mention.css')
                 ->loadedOnRequest(),
         ], package: 'asmit/filament-mention');
     }

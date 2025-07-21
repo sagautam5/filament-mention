@@ -5,16 +5,11 @@ return [
         'model' => \App\Models\User::class,
         'column' => [
             'id' => 'id',
-            'display_name' => 'name',
-            'username' => 'username',
+            'label' => 'name',
+            'value' => 'username',
             'avatar' => 'profile',
         ],
-        'url' => 'admin/users/{id}',
-        // this will be used to generate the url for the mention item
-        'lookup_key' => 'username',
-        // this will be used on static search
-        'search_key' => 'username',
-        // this will be used on dynamic search
+        'url' => 'admin/users/{id}', // this will be used to generate the url for the mention item
     ],
     'default' => [
         'trigger_with' => [
@@ -23,33 +18,27 @@ return [
             '%',
         ],
         'trigger_configs' => [
-            '@' => [
-                'lookupKey' => 'username',
-                'prefix' => '',
-                'suffix' => '',
-                'titleField' => 'name',
-                'hintField' => null,
-            ],
             '#' => [
-                'lookupKey' => 'username',
-                'prefix' => '',
-                'suffix' => '',
-                'titleField' => 'name',
-                'hintField' => null,
+                'lookupKey' => 'value',
+                'prefix' => '[',
+                'suffix' => ']',
+                'labelKey' => 'label',
+                'hintKey' => null,
             ],
             '%' => [
-                'lookupKey' => 'name',
+                'lookupKey' => 'value',
                 'prefix' => '%',
                 'suffix' => '%',
-                'titleField' => 'name',
-                'hintField' => null,
+                'labelKey' => 'id',
+                'hintKey' => null,
             ],
         ],
+        'lookup_key' => 'value',
         'menu_show_min_length' => 2,
         'menu_item_limit' => 10,
         'prefix' => '',
         'suffix' => '',
-        'title_field' => 'name',
-        'hint_field' => null,
+        'label_key' => 'label',
+        'hint_key' => null,
     ],
 ];

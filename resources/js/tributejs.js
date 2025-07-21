@@ -1,30 +1,23 @@
 import Tribute from "tributejs";
 
 function createTribute({
-                           fieldName,
-                           triggerWith,
-                           pluck,
-                           menuShowMinLength,
-                           menuItemLimit,
-                           lookupKey,
-                           loadingItemString,
-                           noResultsString,
-                           valuesFunction,
-                           triggerConfigs = null,
-                           prefix = '',
-                           suffix = '',
-                           titleField = 'title',
-                           hintField = null
-                       }) {
-    const targetElement = document.getElementById(fieldName);
+    statePath,
+    triggerWith,
+    pluck,
+    menuShowMinLength,
+    menuItemLimit,
+    lookupKey,
+    loadingItemString,
+    noResultsString,
+    valuesFunction,
+    triggerConfigs = null,
+    prefix = '',
+    suffix = '',
+    labelKey = 'id',
+    hintKey = null
+}) {
 
-    // Ensure menuShowMinLength is properly parsed as an integer with a default of 0
-    const minLength = menuShowMinLength !== undefined && menuShowMinLength !== null ?
-        parseInt(menuShowMinLength) : 0;
-
-    // Ensure menuItemLimit is properly parsed as an integer with a default
-    const itemLimit = menuItemLimit !== undefined && menuItemLimit !== null ?
-        parseInt(menuItemLimit) : 10;
+    const targetElement = document.getElementById(statePath);
 
     // Helper function to search across all object properties
     function searchInObject(item, searchText) {
@@ -55,9 +48,8 @@ function createTribute({
 
         // Otherwise, try common fields in order
         if (item.value) return item.value;
-        if (item.username) return item.username;
-        if (item.name) return item.name;
-        if (item.key) return item.key;
+        if (item.label) return item.label;
+        if (item.hint) return item.hint;
 
         // If none of the above, use the first string property
         for (const key in item) {
@@ -70,21 +62,23 @@ function createTribute({
         return "Unknown";
     }
 
-    // Helper function to get title value
-    function getTitleValue(item, field) {
+    // Helper function to get label value
+    function getLabel(item, field) {
+        console.log('item:', item)
+        console.log('field:', field)
         if (field && item[field]) {
             return item[field];
         }
 
-        if (item.title) return item.title;
-        if (item.name) return item.name;
         if (item.label) return item.label;
+        if (item.hint) return item.hint;
+        if (item.value) return item.value;
 
         return getDisplayValue(item, null);
     }
 
     // Helper function to get hint value
-    function getHintValue(item, field, currentPrefix, currentSuffix, lookupKey) {
+    function getHint(item, field, currentPrefix, currentSuffix, lookupKey) {
         if (field && item[field]) {
             return `${currentPrefix}${item[field]}${currentSuffix}`;
         }
@@ -93,77 +87,16 @@ function createTribute({
         return `${currentPrefix}${displayValue}${currentSuffix}`;
     }
 
-    // If triggerWith is a string (single trigger)
-    if (!Array.isArray(triggerWith)) {
-        const currentPrefix = prefix || '';
-        const currentSuffix = suffix || '';
-
-        const tribute = new Tribute({
-            trigger: triggerWith,
-            values: function (text, cb) {
-                valuesFunction(text, function (items) {
-                    // Filter items by searching across all properties
-                    const filteredItems = items.filter(item => searchInObject(item, text));
-
-                    cb(filteredItems);
-                });
-            },
-            menuShowMinLength: minLength,
-            menuItemLimit: itemLimit,
-            loadingItemTemplate: `<div class="loading-item">${loadingItemString}</div>`,
-            lookup: function (item, mentionText) {
-                return getDisplayValue(item, lookupKey);
-            },
-            menuContainer: document.body,
-            menuItemTemplate: function (item) {
-                const title = getTitleValue(item.original, titleField);
-                const hint = getHintValue(item.original, hintField, currentPrefix, currentSuffix, lookupKey);
-
-                return `
-                    <div class='mention-item'>
-                        ${item.original.avatar ? `<img class="mention-item__avatar" src="${item.original.avatar}" alt="${title}"/>` : ''}
-                        <div class='mention-item__info'>
-                            <div class='mention-item__info-title'>${title}</div>
-                            <div class='mention-item__info-hint'>${hint}</div>
-                        </div>
-                    </div>
-                `;
-            },
-            selectTemplate: function (item) {
-                if (typeof item === "undefined") return null;
-
-                const displayValue = getDisplayValue(item.original, lookupKey);
-
-                if (item.original.url !== null) {
-                    return `<a href="${item.original.url}(--${item.original[pluck]}--)" data-trix-attribute="bold">${currentPrefix}${displayValue}${currentSuffix}</a>`;
-                } else {
-                    return `${currentPrefix}${displayValue}${currentSuffix}`;
-                }
-            },
-            noMatchTemplate: function () {
-                return `<span class="no-match">${noResultsString}</span>`;
-            }
-        });
-
-        tribute.attach(targetElement);
-
-        setupEventListeners(targetElement, tribute);
-
-        return tribute;
-    }
-
     // If triggerWith is an array (multiple triggers)
     const collections = [];
 
-    for (let i = 0; i < triggerWith.length; i++) {
-        const trigger = triggerWith[i];
-
+    triggerWith.forEach(trigger => {
         // Check if we have specific config for this trigger
         let currentLookupKey = lookupKey;
         let currentPrefix = prefix || '';
         let currentSuffix = suffix || '';
-        let currentTitleField = titleField;
-        let currentHintField = hintField;
+        let currentLabelKey = labelKey;
+        let currentHintKey = hintKey;
         let currentConfig = null;
 
         if (triggerConfigs && triggerConfigs[trigger]) {
@@ -182,17 +115,18 @@ function createTribute({
             }
 
             // Support both camelCase and snake_case
-            if (currentConfig.titleField) {
-                currentTitleField = currentConfig.titleField;
-            } else if (currentConfig.title_field) {
-                currentTitleField = currentConfig.title_field;
+            if (currentConfig.labelKey) {
+                currentLabelKey = currentConfig.labelKey;
+
+            } else if (currentConfig.label_key) {
+                currentLabelKey = currentConfig.label_key;
             }
 
             // Support both camelCase and snake_case
-            if (currentConfig.hintField) {
-                currentHintField = currentConfig.hintField;
-            } else if (currentConfig.hint_field) {
-                currentHintField = currentConfig.hint_field;
+            if (currentConfig.hintKey) {
+                currentHintKey = currentConfig.hintKey;
+            } else if (currentConfig.hint_key) {
+                currentHintKey = currentConfig.hint_key;
             }
         }
 
@@ -212,22 +146,22 @@ function createTribute({
                     cb(filteredItems);
                 });
             },
-            lookup: function (item, mentionText) {
+            lookup: function (item) {
                 return getDisplayValue(item, currentLookupKey);
             },
-            menuShowMinLength: minLength,
-            menuItemLimit: itemLimit,
+            menuShowMinLength: menuShowMinLength,
+            menuItemLimit: menuItemLimit,
             loadingItemTemplate: `<div class="loading-item">${loadingItemString}</div>`,
             menuContainer: document.body,
             menuItemTemplate: function (item) {
-                const title = getTitleValue(item.original, currentTitleField);
-                const hint = getHintValue(item.original, currentHintField, currentPrefix, currentSuffix, currentLookupKey);
+                const label = getLabel(item.original, currentLabelKey);
+                const hint = getHint(item.original, currentHintKey, currentPrefix, currentSuffix, currentLookupKey);
 
                 return `
                     <div class='mention-item'>
-                        ${item.original.avatar ? `<img class="mention-item__avatar" src="${item.original.avatar}" alt="${title}"/>` : ''}
+                        ${item.original.avatar ? `<img class="mention-item__avatar" src="${item.original.avatar}" alt="${label}"/>` : ''}
                         <div class='mention-item__info'>
-                            <div class='mention-item__info-title'>${title}</div>
+                            <div class='mention-item__info-label'>${label}</div>
                             <div class='mention-item__info-hint'>${hint}</div>
                         </div>
                     </div>
@@ -248,7 +182,7 @@ function createTribute({
                 return `<span class="no-match">${noResultsString}</span>`;
             }
         });
-    }
+    });
 
     const tribute = new Tribute({
         collection: collections
@@ -280,88 +214,51 @@ function setupEventListeners(targetElement, tribute) {
             // Scroll down to the next item
             const nextItem = activeItem.nextElementSibling;
             if (nextItem) {
-                nextItem.scrollIntoView({behavior: "smooth", block: "nearest"});
+                nextItem.scrollIntoView({ behavior: "smooth", block: "nearest" });
             }
         } else if (event.key === "ArrowUp") {
             // Scroll up to the previous item
             const prevItem = activeItem.previousElementSibling;
             if (prevItem) {
-                prevItem.scrollIntoView({behavior: "smooth", block: "nearest"});
+                prevItem.scrollIntoView({ behavior: "smooth", block: "nearest" });
             }
         }
     });
 }
 
-export function mention({
-                            fieldName,
-                            mentionableItems,
-                            triggerWith,
-                            pluck,
-                            menuShowMinLength,
-                            menuItemLimit,
-                            lookupKey,
-                            loadingItemString,
-                            noResultsString,
-                            triggerConfigs = null,
-                            prefix = '',
-                            suffix = '',
-                            titleField = 'title',
-                            hintField = null
-                        }) {
-    return {
-        fieldName,
-        pluck,
-        menuShowMinLength,
-        lookupKey,
-        menuItemLimit,
-        init() {
-            createTribute({
-                fieldName: this.fieldName,
-                triggerWith,
-                pluck,
-                menuShowMinLength,
-                lookupKey,
-                menuItemLimit,
-                loadingItemString,
-                noResultsString,
-                triggerConfigs,
-                prefix,
-                suffix,
-                titleField,
-                hintField,
-                valuesFunction: function (text, cb) {
-                    cb(mentionableItems);
-                }
-            });
-        }
-    };
+export function editor()  {
+    console.log('Nice to meet you!');
 }
 
-export function fetchMention({
-                                 fieldName,
-                                 triggerWith,
-                                 pluck,
-                                 menuShowMinLength,
-                                 menuItemLimit,
-                                 lookupKey,
-                                 loadingItemString,
-                                 noResultsString,
-                                 triggerConfigs = null,
-                                 prefix = '',
-                                 suffix = '',
-                                 titleField = 'title',
-                                 hintField = null
-                             }) {
+export function mention({
+    statePath,
+    mentionableItems,
+    triggerWith,
+    pluck,
+    menuShowMinLength = 2,
+    menuItemLimit = 10,
+    lookupKey,
+    loadingItemString,
+    noResultsString,
+    triggerConfigs = null,
+    prefix = '',
+    suffix = '',
+    labelKey = 'label',
+    hintKey = null,
+    enableDynamicSearch,
+    getMentionResultUsing
+}) {
     return {
-        fieldName,
+        statePath,
         pluck,
         menuShowMinLength,
-        menuItemLimit,
         lookupKey,
+        menuItemLimit,
+        enableDynamicSearch,
+        getMentionResultUsing,
         init() {
-            const alpine = this.$wire;
             createTribute({
-                fieldName: this.fieldName,
+                statePath: this.statePath,
                 triggerWith,
                 pluck,
                 menuShowMinLength,
@@ -372,12 +269,22 @@ export function fetchMention({
                 triggerConfigs,
                 prefix,
                 suffix,
-                titleField,
-                hintField,
+                labelKey,
+                hintKey,
+                enableDynamicSearch,
+                getMentionResultUsing,
                 valuesFunction: function (text, cb) {
-                    alpine.getMentionableItems(text).then(function (items) {
+                    if (enableDynamicSearch) {
+                        this.getMentionResultUsing(text, this.statePath).then((response) => {
+                            cb(response);
+                        });
+                    } else {
+                        const items = mentionableItems.filter(function (user) {
+                            return user[lookupKey].toLowerCase().includes(text.toLowerCase())
+                        }
+                        );
                         cb(items);
-                    });
+                    }
                 }
             });
         }

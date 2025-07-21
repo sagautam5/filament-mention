@@ -5,11 +5,11 @@ namespace Asmit\FilamentMention\Forms\Components;
 use Asmit\FilamentMention\Concerns\HasRichMentions;
 use Filament\Forms\Components\RichEditor;
 
-class RichMentionEditor extends RichEditor
+class TipTapMention extends RichEditor
 {
     use HasRichMentions;
 
-    protected string $view = 'asmit-filament-mention::forms.components.rich-mention';
+    protected string $view = 'asmit-filament-mention::forms.components.tip-tap-mention';
 
     protected function setUp(): void
     {
